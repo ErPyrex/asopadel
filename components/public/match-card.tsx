@@ -11,13 +11,19 @@ interface MatchCardProps {
         awayTeam: { id: string; name: string }
         homeScore: number | null
         awayScore: number | null
-        status: 'played' | 'upcoming'
+        status: 'played' | 'upcoming' | 'cancelled'
+        cancellationReason?: string | null
     }
 }
 
 export function MatchCard({ match }: MatchCardProps) {
     return (
-        <Card className="hover:shadow-lg transition-shadow">
+        <Card className="hover:shadow-lg transition-shadow relative overflow-hidden">
+            {match.status === 'cancelled' && (
+                <div className="absolute top-0 right-0 bg-destructive text-destructive-foreground px-3 py-1 text-xs font-bold uppercase">
+                    Cancelled
+                </div>
+            )}
             <CardContent className="p-6">
                 <div className="flex flex-col items-center justify-center space-y-4">
                     <div className="text-sm text-muted-foreground font-medium uppercase tracking-wider">
@@ -42,6 +48,10 @@ export function MatchCard({ match }: MatchCardProps) {
                                         {match.awayScore}
                                     </span>
                                 </div>
+                            ) : match.status === 'cancelled' ? (
+                                <div className="flex flex-col items-center">
+                                    <span className="text-2xl font-bold text-destructive">VS</span>
+                                </div>
                             ) : (
                                 <span className="text-2xl font-bold text-muted-foreground">VS</span>
                             )}
@@ -52,6 +62,12 @@ export function MatchCard({ match }: MatchCardProps) {
                             <span className="text-lg font-bold group-hover:text-primary transition-colors">{match.awayTeam.name}</span>
                         </Link>
                     </div>
+
+                    {match.status === 'cancelled' && match.cancellationReason && (
+                        <div className="text-sm text-destructive font-medium mt-2 bg-destructive/10 px-4 py-2 rounded-md">
+                            Reason: {match.cancellationReason}
+                        </div>
+                    )}
                 </div>
             </CardContent>
         </Card>

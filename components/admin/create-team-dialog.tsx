@@ -23,20 +23,37 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { createTeam } from '@/lib/actions/teams'
 import { toast } from 'sonner'
-import { Plus } from 'lucide-react'
+import { Plus, Check, ChevronsUpDown } from 'lucide-react'
+import { cn } from "@/lib/utils"
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
 
 const formSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
     logo: z.string().optional(),
+    playerIds: z.array(z.string()).optional(),
 })
 
-export function CreateTeamDialog() {
+export function CreateTeamDialog({ players }: { players?: { id: string; name: string }[] }) {
     const [open, setOpen] = useState(false)
+    const [openCombobox, setOpenCombobox] = useState(false)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
             logo: '',
+            playerIds: [],
         },
     })
 
@@ -59,7 +76,7 @@ export function CreateTeamDialog() {
                     Create Team
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Create New Team</DialogTitle>
                 </DialogHeader>
@@ -78,8 +95,86 @@ export function CreateTeamDialog() {
                                 </FormItem>
                             )}
                         />
-                        {/* Logo field omitted for simplicity as user asked for logo but upload is complex without S3 setup details. 
-                 If needed we can add a simple URL input. */ }
+                        <FormField
+                            control={form.control}
+                            name="logo"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Logo URL (Optional)</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="https://..." {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        {players && (
+                            <FormField
+                                control={form.control}
+                                name="playerIds"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel>Select Players</FormLabel>
+                                        <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        className={cn(
+                                                            "w-full justify-between",
+                                                            !field.value?.length && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value?.length
+                                                            ? `${field.value.length} players selected`
+                                                            : "Select players"}
+                                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-[400px] p-0">
+                                                <Command>
+                                                    <CommandInput placeholder="Search player..." />
+                                                    <CommandList>
+                                                        <CommandEmpty>No player found.</CommandEmpty>
+                                                        <CommandGroup>
+                                                            {players.map((player) => (
+                                                                <CommandItem
+                                                                    value={player.name}
+                                                                    key={player.id}
+                                                                    onSelect={() => {
+                                                                        const current = field.value || []
+                                                                        const isSelected = current.includes(player.id)
+                                                                        if (isSelected) {
+                                                                            field.onChange(current.filter((id) => id !== player.id))
+                                                                        } else {
+                                                                            field.onChange([...current, player.id])
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <Check
+                                                                        className={cn(
+                                                                            "mr-2 h-4 w-4",
+                                                                            field.value?.includes(player.id)
+                                                                                ? "opacity-100"
+                                                                                : "opacity-0"
+                                                                        )}
+                                                                    />
+                                                                    {player.name}
+                                                                </CommandItem>
+                                                            ))}
+                                                        </CommandGroup>
+                                                    </CommandList>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
                         <Button type="submit" className="w-full">Create Team</Button>
                     </form>
                 </Form>
