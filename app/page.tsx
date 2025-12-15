@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export default async function LandingPage(props: {
-  searchParams: Promise<{ filter?: 'played' | 'upcoming' }>
+  searchParams: Promise<{ filter?: 'played' | 'upcoming' | 'cancelled' }>
 }) {
   const searchParams = await props.searchParams
   const filter = searchParams.filter
@@ -43,6 +43,9 @@ export default async function LandingPage(props: {
             </Link>
             <Link href="/?filter=upcoming">
               <Button variant={filter === 'upcoming' ? "default" : "outline"}>Upcoming</Button>
+            </Link>
+            <Link href="/?filter=cancelled">
+              <Button variant={filter === 'cancelled' ? "default" : "outline"}>Cancelled</Button>
             </Link>
           </div>
         </div>

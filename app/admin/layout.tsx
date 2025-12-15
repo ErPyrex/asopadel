@@ -18,6 +18,7 @@ export default async function AdminLayout({
         redirect('/signin')
     }
 
+
     return (
         <div className="flex min-h-screen flex-col">
             <header className="border-b bg-background">
@@ -26,6 +27,9 @@ export default async function AdminLayout({
                     <nav className="flex items-center space-x-6 text-sm font-medium">
                         <Link href="/admin/teams" className="transition-colors hover:text-foreground/80">
                             Teams
+                        </Link>
+                        <Link href="/admin/players" className="transition-colors hover:text-foreground/80">
+                            Players
                         </Link>
                         <Link href="/admin/matches" className="transition-colors hover:text-foreground/80">
                             Matches

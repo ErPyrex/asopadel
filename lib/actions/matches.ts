@@ -59,7 +59,19 @@ export async function updateMatchResult({
     revalidatePath('/')
 }
 
-export async function getMatches(filter?: 'played' | 'upcoming') {
+export async function cancelMatch({ matchId, reason }: { matchId: string; reason: string }) {
+    await db.update(matches)
+        .set({
+            status: 'cancelled',
+            cancellationReason: reason,
+        })
+        .where(eq(matches.id, matchId))
+
+    revalidatePath('/admin/matches')
+    revalidatePath('/')
+}
+
+export async function getMatches(filter?: 'played' | 'upcoming' | 'cancelled') {
     const where = filter ? eq(matches.status, filter) : undefined
 
     return await db.query.matches.findMany({

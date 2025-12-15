@@ -3,6 +3,7 @@ import { getTeams } from '@/lib/actions/teams'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CreateMatchDialog } from '@/components/admin/create-match-dialog'
 import { UpdateResultDialog } from '@/components/admin/update-result-dialog'
+import { CancelMatchDialog } from '@/components/admin/cancel-match-dialog'
 import { format } from 'date-fns'
 
 export default async function AdminMatchesPage() {
@@ -33,7 +34,11 @@ export default async function AdminMatchesPage() {
                                     </span>
                                 )}
                             </div>
-                            <div>
+
+                            <div className="flex gap-2">
+                                {match.status === 'upcoming' && (
+                                    <CancelMatchDialog matchId={match.id} />
+                                )}
                                 <UpdateResultDialog match={match} />
                             </div>
                         </CardContent>

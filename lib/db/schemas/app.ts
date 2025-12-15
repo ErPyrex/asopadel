@@ -21,7 +21,8 @@ export const matches = sqliteTable('matches', {
     awayTeamId: text('away_team_id').references(() => teams.id, { onDelete: 'cascade' }).notNull(),
     homeScore: integer('home_score'),
     awayScore: integer('away_score'),
-    status: text('status', { enum: ['played', 'upcoming'] }).default('upcoming').notNull(),
+    status: text('status', { enum: ['played', 'upcoming', 'cancelled'] }).default('upcoming').notNull(),
+    cancellationReason: text('cancellation_reason'),
 })
 
 export const teamsRelations = relations(teams, ({ many }) => ({
