@@ -1,8 +1,8 @@
-import { getMatches } from '@/lib/actions/matches'
-import { MatchCard } from '@/components/public/match-card'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { HomeAuthButton } from '@/components/public/home-auth-button'
+import { MatchCard } from '@/components/public/match-card'
+import { Button } from '@/components/ui/button'
+import { getMatches } from '@/lib/actions/matches'
 
 export default async function LandingPage(props: {
   searchParams: Promise<{ filter?: 'played' | 'upcoming' | 'cancelled' }>
@@ -22,7 +22,8 @@ export default async function LandingPage(props: {
           Padel League 2024
         </h1>
         <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
-          Follow the latest matches, check results, and track your favorite teams.
+          Follow the latest matches, check results, and track your favorite
+          teams.
         </p>
       </section>
 
@@ -33,25 +34,29 @@ export default async function LandingPage(props: {
 
           <div className="flex gap-2">
             <Link href="/">
-              <Button variant={!filter ? "default" : "outline"}>All</Button>
+              <Button variant={!filter ? 'default' : 'outline'}>All</Button>
             </Link>
             <Link href="/?filter=played">
-              <Button variant={filter === 'played' ? "default" : "outline"}>Results</Button>
+              <Button variant={filter === 'played' ? 'default' : 'outline'}>
+                Results
+              </Button>
             </Link>
             <Link href="/?filter=upcoming">
-              <Button variant={filter === 'upcoming' ? "default" : "outline"}>Upcoming</Button>
+              <Button variant={filter === 'upcoming' ? 'default' : 'outline'}>
+                Upcoming
+              </Button>
             </Link>
             <Link href="/?filter=cancelled">
-              <Button variant={filter === 'cancelled' ? "default" : "outline"}>Cancelled</Button>
+              <Button variant={filter === 'cancelled' ? 'default' : 'outline'}>
+                Cancelled
+              </Button>
             </Link>
           </div>
         </div>
 
         <div className="grid gap-4">
           {matches.length > 0 ? (
-            matches.map((match) => (
-              <MatchCard key={match.id} match={match} />
-            ))
+            matches.map((match) => <MatchCard key={match.id} match={match} />)
           ) : (
             <div className="text-center py-12 text-muted-foreground">
               No matches found.
