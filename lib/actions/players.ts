@@ -35,7 +35,12 @@ export async function getPlayer(playerId: string) {
   return await db.query.players.findFirst({
     where: eq(players.id, playerId),
     with: {
-      team: true,
+      team: {
+        with: {
+          homeMatches: true,
+          awayMatches: true,
+        },
+      },
     },
   })
 }
@@ -63,4 +68,27 @@ export async function deletePlayers(playerIds: string[]) {
   await db.delete(players).where(inArray(players.id, playerIds))
   revalidatePath('/dashboard/players')
   revalidatePath('/dashboard/teams')
+}
+
+export async function editPlayer({
+  playerId,
+  name,
+  teamId,
+}: {
+  playerId: string
+  name: string
+  teamId: string | null
+}) {
+  await db
+    .update(players)
+    .set({
+      name,
+      teamId,
+    })
+    .where(eq(players.id, playerId))
+
+  revalidatePath('/dashboard/players')
+  revalidatePath('/dashboard/teams')
+  revalidatePath(`/dashboard/players/${playerId}`)
+  revalidatePath('/')
 }
