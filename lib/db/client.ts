@@ -15,14 +15,13 @@ const client = createClient({
   authToken,
 })
 
-import * as authSchema from './schemas/auth'
 import * as appSchema from './schemas/app'
+import * as authSchema from './schemas/auth'
 
 export const db = drizzle({
   client,
   schema: {
     ...authSchema,
-    ...appSchema
-  }
+    ...appSchema,
+  },
 })
-
