@@ -84,6 +84,7 @@ export async function editTeam({
 
 export async function getTeams() {
   return await db.query.teams.findMany({
+    where: eq(teams.archived, false),
     with: {
       players: true,
     },
@@ -107,4 +108,26 @@ export async function getTeam(teamId: string) {
       },
     },
   })
+}
+export async function deleteTeam(teamId: string) {
+  // 1. Remove players from the team so they are unassigned
+  await db
+    .update(players)
+    .set({ teamId: null })
+    .where(eq(players.teamId, teamId))
+
+  // 2. Mark team as archived instead of deleting it physically
+  await db.update(teams).set({ archived: true }).where(eq(teams.id, teamId))
+
+  revalidatePath('/dashboard/teams')
+  revalidatePath('/dashboard/players')
+  revalidatePath('/')
+}
+
+export async function removePlayerFromTeam(playerId: string) {
+  await db.update(players).set({ teamId: null }).where(eq(players.id, playerId))
+
+  revalidatePath('/dashboard/teams')
+  revalidatePath('/dashboard/players')
+  revalidatePath('/')
 }

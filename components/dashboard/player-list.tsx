@@ -27,6 +27,8 @@ import {
 } from '@/components/ui/table'
 import { deletePlayers } from '@/lib/actions/players'
 
+import { EditPlayerDialog } from '@/components/dashboard/edit-player-dialog'
+
 type Player = {
   id: string
   name: string
@@ -36,7 +38,13 @@ type Player = {
   } | null
 }
 
-export function PlayerList({ initialPlayers }: { initialPlayers: Player[] }) {
+export function PlayerList({
+  initialPlayers,
+  teams,
+}: {
+  initialPlayers: Player[]
+  teams: { id: string; name: string }[]
+}) {
   const [isDeleteMode, setIsDeleteMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
@@ -163,11 +171,9 @@ export function PlayerList({ initialPlayers }: { initialPlayers: Player[] }) {
                   )}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Link href={`/dashboard/players/${player.id}`}>
-                    <Button variant="ghost" size="sm">
-                      View
-                    </Button>
-                  </Link>
+                  <div className="flex justify-end gap-2">
+                    <EditPlayerDialog player={player} teams={teams} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

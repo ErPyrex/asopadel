@@ -8,6 +8,7 @@ export const teams = sqliteTable('teams', {
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   logo: text('logo'),
+  archived: integer('archived', { mode: 'boolean' }).notNull().default(false),
 })
 
 export const players = sqliteTable('players', {
@@ -15,7 +16,7 @@ export const players = sqliteTable('players', {
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
-  teamId: text('team_id').references(() => teams.id, { onDelete: 'cascade' }),
+  teamId: text('team_id').references(() => teams.id, { onDelete: 'set null' }),
 })
 
 export const matches = sqliteTable('matches', {
@@ -24,10 +25,10 @@ export const matches = sqliteTable('matches', {
     .$defaultFn(() => createId()),
   date: integer('date', { mode: 'timestamp' }).notNull(),
   homeTeamId: text('home_team_id')
-    .references(() => teams.id, { onDelete: 'cascade' })
+    .references(() => teams.id, { onDelete: 'set null' })
     .notNull(),
   awayTeamId: text('away_team_id')
-    .references(() => teams.id, { onDelete: 'cascade' })
+    .references(() => teams.id, { onDelete: 'set null' })
     .notNull(),
   homeScore: integer('home_score'),
   awayScore: integer('away_score'),
