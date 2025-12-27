@@ -1,4 +1,4 @@
-import { ChevronLeft, User } from 'lucide-react'
+import { BarChart3, ChevronLeft, User } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -17,6 +17,36 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
 
   if (!player) {
     notFound()
+  }
+
+  // Calculate stats based on team matches
+  let wins = 0
+  let losses = 0
+  let totalPlayed = 0
+
+  if (player.team) {
+    const homeMatches = player.team.homeMatches || []
+    const awayMatches = player.team.awayMatches || []
+    const allMatches = [...homeMatches, ...awayMatches]
+
+    for (const match of allMatches) {
+      if (match.status !== 'played') continue
+      if (match.homeScore === null || match.awayScore === null) continue
+
+      totalPlayed++
+
+      const isHome = match.homeTeamId === player.team.id
+      const teamScore = isHome ? match.homeScore : match.awayScore
+      const opponentScore = isHome ? match.awayScore : match.homeScore
+
+      if (teamScore > opponentScore) {
+        wins++
+      } else if (teamScore < opponentScore) {
+        losses++
+      } else {
+        draws++
+      }
+    }
   }
 
   return (
@@ -41,7 +71,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
           <CardContent className="space-y-4">
             <div>
               <span className="text-sm font-medium text-muted-foreground">
-                Team
+                Current Team
               </span>
               <div className="text-lg font-semibold">
                 {player.team ? (
@@ -58,7 +88,69 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
                 )}
               </div>
             </div>
-            {/* Stats can go here later */}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5" />
+              Statistics
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="space-y-1">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Won
+                </span>
+                <div className="text-2xl font-bold text-green-600 font-mono">
+                  {wins}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Lost
+                </span>
+                <div className="text-2xl font-bold text-red-600 font-mono">
+                  {losses}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Played
+                </span>
+                <div className="text-2xl font-bold font-mono">
+                  {totalPlayed}
+                </div>
+              </div>
+            </div>
+            {player.team && totalPlayed > 0 && (
+              <div className="mt-6 pt-6 border-t">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Win Rate</span>
+                  <span className="font-bold">
+                    {((wins / totalPlayed) * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2 mt-2 border overflow-hidden">
+                  <div
+                    className="bg-green-500 h-full rounded-full transition-all duration-500"
+                    style={{ width: `${(wins / totalPlayed) * 100}%` }}
+                  />
+                </div>
+              </div>
+            )}
+            {!player.team && (
+              <p className="text-sm text-muted-foreground italic text-center py-4">
+                Assign a team to track statistics.
+              </p>
+            )}
+            {player.team && totalPlayed === 0 && (
+              <p className="text-sm text-muted-foreground italic text-center py-4">
+                No matches played yet.
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>
