@@ -2,6 +2,7 @@ import { getMatches } from '@/lib/actions/matches'
 import { MatchCard } from '@/components/public/match-card'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { HomeAuthButton } from '@/components/public/home-auth-button'
 
 export default async function LandingPage(props: {
   searchParams: Promise<{ filter?: 'played' | 'upcoming' | 'cancelled' }>
@@ -15,11 +16,7 @@ export default async function LandingPage(props: {
       {/* Hero Section */}
       <section className="relative bg-primary text-primary-foreground py-20 px-4 text-center">
         <div className="absolute top-4 right-4">
-          <Link href="/signin">
-            <Button variant="ghost" className="text-white hover:bg-white/20">
-              Inicia Sesión
-            </Button>
-          </Link>
+          <HomeAuthButton />
         </div>
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
           Padel League 2024
