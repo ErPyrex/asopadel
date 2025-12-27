@@ -25,17 +25,17 @@ export default async function AdminLayout({
             <header className="border-b bg-background">
                 <div className="container flex h-16 items-center px-4 justify-between">
                     <div className="flex items-center">
-                        <Link href="/admin" className="mr-8 font-bold hover:text-foreground/80 transition-colors">
+                        <Link href="/dashboard" className="mr-8 font-bold hover:text-foreground/80 transition-colors">
                             Admin Console
                         </Link>
                         <nav className="flex items-center space-x-6 text-sm font-medium">
-                            <Link href="/admin/teams" className="transition-colors hover:text-foreground/80">
+                            <Link href="/dashboard/teams" className="transition-colors hover:text-foreground/80">
                                 Teams
                             </Link>
-                            <Link href="/admin/players" className="transition-colors hover:text-foreground/80">
+                            <Link href="/dashboard/players" className="transition-colors hover:text-foreground/80">
                                 Players
                             </Link>
-                            <Link href="/admin/matches" className="transition-colors hover:text-foreground/80">
+                            <Link href="/dashboard/matches" className="transition-colors hover:text-foreground/80">
                                 Matches
                             </Link>
                         </nav>
