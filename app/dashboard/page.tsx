@@ -60,10 +60,10 @@ export default async function AdminPage() {
                         <CardTitle>Quick Actions</CardTitle>
                     </CardHeader>
                     <CardContent className="flex gap-4">
-                        <Link href="/admin/teams">
+                        <Link href="/dashboard/teams">
                             <Button>Manage Teams</Button>
                         </Link>
-                        <Link href="/admin/matches">
+                        <Link href="/dashboard/matches">
                             <Button variant="outline">Manage Matches</Button>
                         </Link>
                     </CardContent>
