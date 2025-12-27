@@ -9,8 +9,13 @@ export function LogoutButton() {
     const router = useRouter()
 
     const handleSignOut = async () => {
-        await authClient.signOut()
-        router.push('/signin')
+        await authClient.signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    router.push('/')
+                }
+            }
+        })
     }
 
     return (
