@@ -60,6 +60,9 @@ export function CreateMatchDialog({
     resolver: zodResolver(formSchema),
   })
 
+  const homeTeamId = form.watch('homeTeamId')
+  const awayTeamId = form.watch('awayTeamId')
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await createMatch(values)
@@ -115,6 +118,9 @@ export function CreateMatchDialog({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
+                        disabled={(date) =>
+                          date < new Date(new Date().setHours(0, 0, 0, 0))
+                        }
                         initialFocus
                       />
                     </PopoverContent>
@@ -139,11 +145,13 @@ export function CreateMatchDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {teams.map((team) => (
-                        <SelectItem key={team.id} value={team.id}>
-                          {team.name}
-                        </SelectItem>
-                      ))}
+                      {teams
+                        .filter((team) => team.id !== awayTeamId)
+                        .map((team) => (
+                          <SelectItem key={team.id} value={team.id}>
+                            {team.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -166,11 +174,13 @@ export function CreateMatchDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {teams.map((team) => (
-                        <SelectItem key={team.id} value={team.id}>
-                          {team.name}
-                        </SelectItem>
-                      ))}
+                      {teams
+                        .filter((team) => team.id !== homeTeamId)
+                        .map((team) => (
+                          <SelectItem key={team.id} value={team.id}>
+                            {team.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

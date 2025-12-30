@@ -40,8 +40,9 @@ export function UpdateResultDialog({ match }: { match: any }) {
     },
   })
 
-  // Disable if match is in the future
-  const isFuture = new Date(match.date) > new Date()
+  // Disable if match is in the future (after today)
+  const isFuture =
+    new Date(match.date).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0)
 
   if (isFuture) {
     return (
