@@ -1,13 +1,16 @@
 import { Calendar, Trophy, Users } from 'lucide-react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getMatches } from '@/lib/actions/matches'
 import { getTeams } from '@/lib/actions/teams'
+import { getPlayers } from '@/lib/actions/players'
+import { CreateTeamDialog } from '@/components/dashboard/create-team-dialog'
+import { CreatePlayerDialog } from '@/components/dashboard/create-player-dialog'
+import { CreateMatchDialog } from '@/components/dashboard/create-match-dialog'
 
 export default async function DashboardPage() {
   const teams = await getTeams()
   const matches = await getMatches()
+  const players = await getPlayers()
 
   const upcomingMatches = matches.filter((m) => m.status === 'upcoming').length
   const playedMatches = matches.filter((m) => m.status === 'played').length
@@ -65,13 +68,12 @@ export default async function DashboardPage() {
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="flex gap-4">
-            <Link href="/dashboard/teams">
-              <Button>Manage Teams</Button>
-            </Link>
-            <Link href="/dashboard/matches">
-              <Button variant="outline">Manage Matches</Button>
-            </Link>
+          <CardContent className="flex flex-wrap gap-4">
+            <div className="flex gap-2">
+              <CreateTeamDialog players={players} />
+              <CreatePlayerDialog />
+              <CreateMatchDialog teams={teams} />
+            </div>
           </CardContent>
         </Card>
       </div>
