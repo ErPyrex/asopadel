@@ -26,7 +26,13 @@ import { Input } from '@/components/ui/input'
 import { createPlayer } from '@/lib/actions/players'
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z
+    .string()
+    .min(2, 'Name must be at least 2 characters')
+    .regex(
+      /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/,
+      'Name can only contain letters and spaces',
+    ),
 })
 
 export function CreatePlayerDialog() {
