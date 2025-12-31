@@ -33,6 +33,18 @@ export default async function DashboardMatchesPage() {
                     Result: {match.homeScore} - {match.awayScore}
                   </span>
                 )}
+                {match.status === 'cancelled' && (
+                  <div className="mt-2 p-2 bg-destructive/10 rounded-md">
+                    <span className="text-xs font-bold text-destructive uppercase">
+                      Cancelled
+                    </span>
+                    {match.cancellationReason && (
+                      <p className="text-sm text-destructive mt-1">
+                        Reason: {match.cancellationReason}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-2">
