@@ -47,7 +47,9 @@ export function MatchCard({ match }: MatchCardProps) {
                 <div className="text-3xl font-black flex items-center gap-2">
                   <span
                     className={cn(
-                      match.homeScore! > match.awayScore! ? 'text-primary' : '',
+                      (match.homeScore ?? 0) > (match.awayScore ?? 0)
+                        ? 'text-primary'
+                        : '',
                     )}
                   >
                     {match.homeScore}
@@ -55,7 +57,9 @@ export function MatchCard({ match }: MatchCardProps) {
                   <span className="text-muted-foreground">-</span>
                   <span
                     className={cn(
-                      match.awayScore! > match.homeScore! ? 'text-primary' : '',
+                      (match.awayScore ?? 0) > (match.homeScore ?? 0)
+                        ? 'text-primary'
+                        : '',
                     )}
                   >
                     {match.awayScore}

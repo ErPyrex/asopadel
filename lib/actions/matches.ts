@@ -1,6 +1,6 @@
 'use server'
 
-import { and, desc, eq, gte, lte } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db/client'
 import { matches } from '@/lib/db/schemas/app'

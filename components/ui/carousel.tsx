@@ -117,6 +117,7 @@ function Carousel({
         canScrollNext,
       }}
     >
+      {/* biome-ignore lint/a11y/useSemanticElements: role="region" is required for aria-roledescription support on div */}
       <div
         onKeyDownCapture={handleKeyDown}
         className={cn('relative', className)}
@@ -156,6 +157,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
   const { orientation } = useCarousel()
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: role="group" is part of the standard WAI-ARIA carousel pattern
     <div
       role="group"
       aria-roledescription="slide"

@@ -1,3 +1,4 @@
+import NextImage from 'next/image'
 import { notFound } from 'next/navigation'
 import { MatchCard } from '@/components/public/match-card'
 import { TeamStatsChart } from '@/components/public/team-stats-chart'
@@ -27,28 +28,19 @@ export default async function TeamPage({
     (a, b) => b.date.getTime() - a.date.getTime(),
   )
 
-  // Note: match objects from getTeam might need normalization as 'homeMatches' has 'awayTeam' relation and vice-versa.
-  // We need to construct a unified match object structure for MatchCard
+  // Define a type for the matches from Drizzle to avoid any
+  type MatchWithTeams = (typeof allMatches)[0] & {
+    homeTeam?: { id: string; name: string }
+    awayTeam?: { id: string; name: string }
+  }
+
   const normalizedMatches = allMatches.map((m) => {
-    /* 
-           Since we used `findFirst` with relations in `getTeam`, 
-           homeMatches will have: { ...matchFields, awayTeam: {...} }
-           awayMatches will have: { ...matchFields, homeTeam: {...} }
-           We need to ensure both team objects are present for MatchCard.
-        */
-    // Re-construct the full match object roughly.
-    // We know the current team 'team' is one side.
-    // Check if it's home or away based on foreign keys or just checking ID or existing relations.
-
-    // Actually Drizzle result structure:
-    // For homeMatches: m has awayTeam. m.homeTeamId == team.id. We can inject homeTeam = team.
-    // For awayMatches: m has homeTeam. m.awayTeamId == team.id. We can inject awayTeam = team.
-
-    const isHome = m.homeTeamId === team.id
+    const match = m as MatchWithTeams
+    const isHome = match.homeTeamId === team.id
     return {
-      ...m,
-      homeTeam: isHome ? team : (m as any).homeTeam, // as any because TS might complain about mixing types
-      awayTeam: !isHome ? team : (m as any).awayTeam,
+      ...match,
+      homeTeam: isHome ? team : match.homeTeam || team,
+      awayTeam: !isHome ? team : match.awayTeam || team,
     }
   })
 
@@ -78,11 +70,14 @@ export default async function TeamPage({
       <div className="flex flex-col items-center mb-12">
         <h1 className="text-4xl font-bold mb-4">{team.name}</h1>
         {team.logo && (
-          <img
-            src={team.logo}
-            alt={team.name}
-            className="h-24 w-24 object-contain"
-          />
+          <div className="relative h-24 w-24">
+            <NextImage
+              src={team.logo}
+              alt={team.name}
+              fill
+              className="object-contain"
+            />
+          </div>
         )}
       </div>
 

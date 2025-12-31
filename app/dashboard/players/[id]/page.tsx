@@ -22,6 +22,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
   // Calculate stats based on team matches
   let wins = 0
   let losses = 0
+  let draws = 0
   let totalPlayed = 0
 
   if (player.team) {
@@ -99,7 +100,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-4 gap-4 text-center">
               <div className="space-y-1">
                 <span className="text-sm font-medium text-muted-foreground">
                   Won
@@ -114,6 +115,14 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
                 </span>
                 <div className="text-2xl font-bold text-red-600 font-mono">
                   {losses}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Drawn
+                </span>
+                <div className="text-2xl font-bold text-yellow-600 font-mono">
+                  {draws}
                 </div>
               </div>
               <div className="space-y-1">
