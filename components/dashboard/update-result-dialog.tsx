@@ -30,9 +30,22 @@ const formSchema = z.object({
   awayScore: z.coerce.number().min(0),
 })
 
-export function UpdateResultDialog({ match }: { match: any }) {
+interface UpdateResultDialogProps {
+  match: {
+    id: string
+    date: Date
+    status: string
+    homeScore: number | null
+    awayScore: number | null
+    homeTeam: { name: string }
+    awayTeam: { name: string }
+  }
+}
+
+export function UpdateResultDialog({ match }: UpdateResultDialogProps) {
   const [open, setOpen] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
+    // biome-ignore lint/suspicious/noExplicitAny: Necessary to avoid type mismatch between Zod schema and useForm
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
       homeScore: match.homeScore ?? 0,

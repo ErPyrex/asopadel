@@ -25,7 +25,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { cancelMatch } from '@/lib/actions/matches'
 
 const formSchema = z.object({
@@ -50,7 +49,7 @@ export function CancelMatchDialog({ matchId }: { matchId: string }) {
       setOpen(false)
       form.reset()
       toast.success('Match cancelled successfully')
-    } catch {
+    } catch (error) {
       toast.error('Failed to cancel match')
       console.error(error)
     }
