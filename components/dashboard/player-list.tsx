@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { CreatePlayerDialog } from '@/components/dashboard/create-player-dialog'
+import { EditPlayerDialog } from '@/components/dashboard/edit-player-dialog'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,8 +27,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { deletePlayers } from '@/lib/actions/players'
-
-import { EditPlayerDialog } from '@/components/dashboard/edit-player-dialog'
 
 type Player = {
   id: string

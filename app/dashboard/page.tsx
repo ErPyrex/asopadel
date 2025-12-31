@@ -1,11 +1,11 @@
 import { Calendar, Trophy, Users } from 'lucide-react'
+import { CreateMatchDialog } from '@/components/dashboard/create-match-dialog'
+import { CreatePlayerDialog } from '@/components/dashboard/create-player-dialog'
+import { CreateTeamDialog } from '@/components/dashboard/create-team-dialog'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getMatches } from '@/lib/actions/matches'
-import { getTeams } from '@/lib/actions/teams'
 import { getPlayers } from '@/lib/actions/players'
-import { CreateTeamDialog } from '@/components/dashboard/create-team-dialog'
-import { CreatePlayerDialog } from '@/components/dashboard/create-player-dialog'
-import { CreateMatchDialog } from '@/components/dashboard/create-match-dialog'
+import { getTeams } from '@/lib/actions/teams'
 
 export default async function DashboardPage() {
   const teams = await getTeams()
