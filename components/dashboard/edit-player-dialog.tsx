@@ -33,7 +33,13 @@ import {
 import { editPlayer } from '@/lib/actions/players'
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z
+    .string()
+    .min(2, 'Name must be at least 2 characters')
+    .regex(
+      /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$/,
+      'Name can only contain letters and spaces',
+    ),
   teamId: z.string().nullable(),
 })
 
