@@ -44,13 +44,17 @@ export function UpdateResultDialog({ match }: { match: any }) {
   const isFuture =
     new Date(match.date).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0)
 
-  if (isFuture) {
+  if (isFuture || match.status === 'cancelled') {
     return (
       <Button
         variant="ghost"
         disabled
         size="sm"
-        title="Cannot update future match"
+        title={
+          match.status === 'cancelled'
+            ? 'Cannot update cancelled match'
+            : 'Cannot update future match'
+        }
       >
         <Trophy className="mr-2 h-4 w-4 opacity-50" />
         Result
