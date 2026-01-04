@@ -35,10 +35,10 @@ import { editPlayer } from '@/lib/actions/players'
 const formSchema = z.object({
   name: z
     .string()
-    .min(2, 'Name must be at least 2 characters')
+    .min(2, 'El nombre debe tener al menos 2 caracteres')
     .regex(
       /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$/,
-      'Name can only contain letters and spaces',
+      'El nombre solo puede contener letras y espacios',
     ),
   teamId: z.string().nullable(),
 })
@@ -71,9 +71,9 @@ export function EditPlayerDialog({
         teamId: values.teamId === 'none' ? null : values.teamId,
       })
       setOpen(false)
-      toast.success('Player updated successfully')
+      toast.success('Jugador actualizado con éxito')
     } catch {
-      toast.error('Failed to update player')
+      toast.error('Error al actualizar el jugador')
     }
   }
 
@@ -82,12 +82,12 @@ export function EditPlayerDialog({
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm">
           <Pencil className="h-4 w-4 mr-2" />
-          Edit
+          Editar
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Player</DialogTitle>
+          <DialogTitle>Editar Jugador</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -96,9 +96,9 @@ export function EditPlayerDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Player Name</FormLabel>
+                  <FormLabel>Nombre del Jugador</FormLabel>
                   <FormControl>
-                    <Input placeholder="Player Name" {...field} />
+                    <Input placeholder="Nombre del Jugador" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -109,18 +109,20 @@ export function EditPlayerDialog({
               name="teamId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Team</FormLabel>
+                  <FormLabel>Equipo</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value || 'none'}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a team" />
+                        <SelectValue placeholder="Seleccionar un equipo" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="none">Free Agent (No Team)</SelectItem>
+                      <SelectItem value="none">
+                        Agente Libre (Sin Equipo)
+                      </SelectItem>
                       {teams.map((team) => (
                         <SelectItem key={team.id} value={team.id}>
                           {team.name}
@@ -133,7 +135,7 @@ export function EditPlayerDialog({
               )}
             />
             <Button type="submit" className="w-full">
-              Save Changes
+              Guardar Cambios
             </Button>
           </form>
         </Form>

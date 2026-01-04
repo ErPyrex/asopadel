@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { CalendarIcon, Plus } from 'lucide-react'
+import { CalendarIcon, Edit2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -32,48 +32,64 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
-import { createTournament } from '@/lib/actions/tournaments'
+import { editTournament } from '@/lib/actions/tournaments'
 import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio.'),
   description: z.string().optional(),
   startDate: z.date(),
-  endDate: z.date().optional(),
+  endDate: z.date().optional().nullable(),
 })
 
-export function CreateTournamentDialog() {
+interface EditTournamentDialogProps {
+  tournament: {
+    id: string
+    name: string
+    description?: string | null
+    startDate: Date
+    endDate?: Date | null
+  }
+}
+
+export function EditTournamentDialog({
+  tournament,
+}: EditTournamentDialogProps) {
   const [open, setOpen] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      description: '',
+      name: tournament.name,
+      description: tournament.description || '',
+      startDate: new Date(tournament.startDate),
+      endDate: tournament.endDate ? new Date(tournament.endDate) : null,
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await createTournament(values)
+      await editTournament({
+        id: tournament.id,
+        ...values,
+      })
       setOpen(false)
-      form.reset()
-      toast.success('Torneo creado con éxito')
+      toast.success('Torneo actualizado con éxito')
     } catch {
-      toast.error('Error al crear el torneo')
+      toast.error('Error al actualizar el torneo')
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Crear Torneo
+        <Button variant="outline" size="sm">
+          <Edit2 className="mr-2 h-4 w-4" />
+          Editar Torneo
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Crear Nuevo Torneo</DialogTitle>
+          <DialogTitle>Editar Torneo</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -173,7 +189,7 @@ export function CreateTournamentDialog() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          selected={field.value}
+                          selected={field.value || undefined}
                           onSelect={field.onChange}
                           disabled={(date) =>
                             form.getValues('startDate')
@@ -190,7 +206,7 @@ export function CreateTournamentDialog() {
               />
             </div>
             <Button type="submit" className="w-full">
-              Crear Torneo
+              Actualizar Torneo
             </Button>
           </form>
         </Form>

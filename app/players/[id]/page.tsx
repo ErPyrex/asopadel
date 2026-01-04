@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import {
   ArrowLeft,
   BarChart3,
@@ -255,7 +256,7 @@ export default async function PublicPlayerPage(props: {
                               </div>
                               <div className="flex items-center gap-2 text-xs text-slate-400">
                                 <Calendar className="h-3 w-3" />
-                                {format(match.date, 'PPP')}
+                                {format(match.date, 'PPP', { locale: es })}
                               </div>
                             </div>
 
@@ -289,7 +290,9 @@ export default async function PublicPlayerPage(props: {
                                   variant="outline"
                                   className="uppercase text-[10px] font-bold text-slate-400 border-slate-200"
                                 >
-                                  {match.status}
+                                  {match.status === 'cancelled'
+                                    ? 'CANCELADO'
+                                    : 'PRÓXIMO'}
                                 </Badge>
                               )}
                             </div>

@@ -27,7 +27,7 @@ import { Separator } from '@/components/ui/separator'
 import { deleteTeam, editTeam, removePlayerFromTeam } from '@/lib/actions/teams'
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
   logo: z.string().optional(),
 })
 
@@ -59,22 +59,22 @@ export function EditTeamDialog({
         logo: values.logo,
       })
       setOpen(false)
-      toast.success('Team updated successfully')
+      toast.success('Equipo actualizado con éxito')
     } catch {
-      toast.error('Failed to update team')
+      toast.error('Error al actualizar el equipo')
     }
   }
 
   async function onDelete() {
-    if (!confirm('Are you sure you want to delete this team?')) return
+    if (!confirm('¿Estás seguro de que quieres eliminar este equipo?')) return
 
     setIsDeleting(true)
     try {
       await deleteTeam(team.id)
       setOpen(false)
-      toast.success('Team deleted successfully')
+      toast.success('Equipo eliminado con éxito')
     } catch {
-      toast.error('Failed to delete team')
+      toast.error('Error al eliminar el equipo')
     } finally {
       setIsDeleting(false)
     }
@@ -83,9 +83,9 @@ export function EditTeamDialog({
   async function onRemovePlayer(playerId: string) {
     try {
       await removePlayerFromTeam(playerId)
-      toast.success('Player removed from team')
+      toast.success('Jugador eliminado del equipo')
     } catch {
-      toast.error('Failed to remove player')
+      toast.error('Error al eliminar el jugador')
     }
   }
 
@@ -98,7 +98,7 @@ export function EditTeamDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Team</DialogTitle>
+          <DialogTitle>Editar Equipo</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -107,9 +107,9 @@ export function EditTeamDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Team Name</FormLabel>
+                  <FormLabel>Nombre del Equipo</FormLabel>
                   <FormControl>
-                    <Input placeholder="Team Name" {...field} />
+                    <Input placeholder="Nombre del Equipo" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -120,7 +120,7 @@ export function EditTeamDialog({
               name="logo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Logo URL (Optional)</FormLabel>
+                  <FormLabel>URL del Logo (Opcional)</FormLabel>
                   <FormControl>
                     <Input placeholder="https://..." {...field} />
                   </FormControl>
@@ -129,7 +129,7 @@ export function EditTeamDialog({
               )}
             />
             <div className="flex justify-between items-center gap-2">
-              <Button type="submit">Save Changes</Button>
+              <Button type="submit">Guardar Cambios</Button>
               <Button
                 type="button"
                 variant="destructive"
@@ -137,7 +137,7 @@ export function EditTeamDialog({
                 disabled={isDeleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete Team
+                Eliminar Equipo
               </Button>
             </div>
           </form>
@@ -146,7 +146,7 @@ export function EditTeamDialog({
         <Separator className="my-4" />
 
         <div className="space-y-4">
-          <h4 className="text-sm font-semibold">Members</h4>
+          <h4 className="text-sm font-semibold">Miembros</h4>
           {team.players && team.players.length > 0 ? (
             <ul className="space-y-2">
               {team.players.map((player) => (
@@ -168,7 +168,7 @@ export function EditTeamDialog({
             </ul>
           ) : (
             <p className="text-sm text-muted-foreground italic">
-              No members in this team.
+              No hay miembros en este equipo.
             </p>
           )}
         </div>

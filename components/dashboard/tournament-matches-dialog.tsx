@@ -1,6 +1,7 @@
 'use client'
 
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { Ban, Calendar as CalendarIcon, Trophy } from 'lucide-react'
 import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
@@ -17,6 +18,7 @@ import { CancelMatchDialog } from './cancel-match-dialog'
 import { CancelTournamentDialog } from './cancel-tournament-dialog'
 import { CreateMatchDialog } from './create-match-dialog'
 import { EditMatchDialog } from './edit-match-dialog'
+import { EditTournamentDialog } from './edit-tournament-dialog'
 import { UpdateResultDialog } from './update-result-dialog'
 
 interface TournamentMatch {
@@ -69,24 +71,30 @@ export function TournamentMatchesDialog({
                           : 'outline'
                   }
                 >
-                  {tournament.status}
+                  {tournament.status === 'completed'
+                    ? 'Completado'
+                    : tournament.status === 'ongoing'
+                      ? 'En Curso'
+                      : tournament.status === 'cancelled'
+                        ? 'Cancelado'
+                        : 'Próximo'}
                 </Badge>
               </div>
               <div className="text-sm text-muted-foreground mt-2 flex items-center gap-2">
                 <CalendarIcon className="h-3 w-3" />
-                {format(tournament.startDate, 'PPP')}
+                {format(tournament.startDate, 'PPP', { locale: es })}
                 {tournament.endDate &&
-                  ` - ${format(tournament.endDate, 'PPP')}`}
+                  ` - ${format(tournament.endDate, 'PPP', { locale: es })}`}
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right mr-4">
                 <span className="text-sm font-medium block">
-                  {tournament.matches.length} Matches
+                  {tournament.matches.length} Partidos
                 </span>
               </div>
               <Button variant="ghost" size="sm">
-                View Matches
+                Ver Partidos
               </Button>
             </div>
           </CardContent>
@@ -100,10 +108,10 @@ export function TournamentMatchesDialog({
             </div>
             <div>
               <DialogTitle className="text-2xl">
-                {tournament.name} Matches
+                Partidos de {tournament.name}
               </DialogTitle>
               <p className="text-sm text-muted-foreground">
-                Manage tournament schedule
+                Gestionar calendario del torneo
               </p>
             </div>
           </div>
@@ -120,6 +128,7 @@ export function TournamentMatchesDialog({
                     minDate={tournament.startDate}
                     maxDate={tournament.endDate}
                   />
+                  <EditTournamentDialog tournament={tournament} />
                   <CancelTournamentDialog tournamentId={tournament.id} />
                 </>
               ) : (
@@ -132,7 +141,7 @@ export function TournamentMatchesDialog({
           </div>
           {tournament.matches.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
-              No matches scheduled for this tournament yet.
+              No hay partidos programados para este torneo aún.
             </div>
           ) : (
             <div className="grid gap-3">
@@ -156,7 +165,7 @@ export function TournamentMatchesDialog({
                     <div className="flex items-center gap-3 mt-2">
                       <span className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">
                         <CalendarIcon className="h-3.5 w-3.5" />
-                        {format(new Date(match.date), 'PPPP')}
+                        {format(new Date(match.date), 'PPPP', { locale: es })}
                       </span>
                       {match.status === 'cancelled' &&
                         match.cancellationReason && (
@@ -176,7 +185,11 @@ export function TournamentMatchesDialog({
                             : 'outline'
                       }
                     >
-                      {match.status}
+                      {match.status === 'played'
+                        ? 'Jugado'
+                        : match.status === 'cancelled'
+                          ? 'Cancelado'
+                          : 'Próximo'}
                     </Badge>
 
                     <div className="flex items-center gap-1 ml-2 border-l pl-3">

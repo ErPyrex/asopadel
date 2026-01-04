@@ -28,7 +28,7 @@ import { Input } from '@/components/ui/input'
 import { cancelMatch } from '@/lib/actions/matches'
 
 const formSchema = z.object({
-  reason: z.string().min(1, 'Reason is required'),
+  reason: z.string().min(1, 'El motivo es obligatorio'),
 })
 
 export function CancelMatchDialog({ matchId }: { matchId: string }) {
@@ -48,9 +48,9 @@ export function CancelMatchDialog({ matchId }: { matchId: string }) {
       })
       setOpen(false)
       form.reset()
-      toast.success('Match cancelled successfully')
+      toast.success('Partido cancelado con éxito')
     } catch (error) {
-      toast.error('Failed to cancel match')
+      toast.error('Error al cancelar el partido')
       console.error(error)
     }
   }
@@ -60,15 +60,15 @@ export function CancelMatchDialog({ matchId }: { matchId: string }) {
       <DialogTrigger asChild>
         <Button variant="destructive" size="sm">
           <Ban className="mr-2 h-4 w-4" />
-          Cancel
+          Cancelar
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Cancel Match</DialogTitle>
+          <DialogTitle>Cancelar Partido</DialogTitle>
           <DialogDescription>
-            Are you sure you want to cancel this match? This action cannot be
-            undone.
+            ¿Estás seguro de que quieres cancelar este partido? Esta acción no
+            se puede deshacer.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -78,9 +78,12 @@ export function CancelMatchDialog({ matchId }: { matchId: string }) {
               name="reason"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cancellation Reason</FormLabel>
+                  <FormLabel>Motivo de Cancelación</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. Rain, Player Injury" {...field} />
+                    <Input
+                      placeholder="Ej: Lluvia, Lesión de jugador"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -88,7 +91,7 @@ export function CancelMatchDialog({ matchId }: { matchId: string }) {
             />
             <DialogFooter>
               <Button type="submit" variant="destructive">
-                Confirm Cancellation
+                Confirmar Cancelación
               </Button>
             </DialogFooter>
           </form>

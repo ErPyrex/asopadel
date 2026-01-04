@@ -59,12 +59,12 @@ export function PlayerList({
     setIsDeleting(true)
     try {
       await deletePlayers(selectedIds)
-      toast.success('Players deleted successfully')
+      toast.success('Jugadores eliminados con éxito')
       setIsDeleteMode(false)
       setSelectedIds([])
       setIsConfirmOpen(false)
     } catch {
-      toast.error('Failed to delete players')
+      toast.error('Error al eliminar los jugadores')
     } finally {
       setIsDeleting(false)
     }
@@ -85,7 +85,7 @@ export function PlayerList({
               }}
             >
               <X className="mr-2 h-4 w-4" />
-              Cancel
+              Cancelar
             </Button>
             <Button
               variant="destructive"
@@ -94,7 +94,7 @@ export function PlayerList({
               onClick={() => setIsConfirmOpen(true)}
             >
               <Trash2 className="mr-2 h-4 w-4" />
-              Delete Selected ({selectedIds.length})
+              Eliminar Seleccionados ({selectedIds.length})
             </Button>
           </>
         ) : (
@@ -104,7 +104,7 @@ export function PlayerList({
             onClick={() => setIsDeleteMode(true)}
           >
             <Trash2 className="mr-2 h-4 w-4" />
-            Delete Players
+            Eliminar Jugadores
           </Button>
         )}
       </div>
@@ -130,9 +130,9 @@ export function PlayerList({
                   />
                 </TableHead>
               )}
-              <TableHead>Name</TableHead>
-              <TableHead>Team</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Nombre</TableHead>
+              <TableHead>Equipo</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -165,7 +165,7 @@ export function PlayerList({
                     </Link>
                   ) : (
                     <span className="text-muted-foreground italic">
-                      Free Agent
+                      Agente Libre
                     </span>
                   )}
                 </TableCell>
@@ -182,7 +182,7 @@ export function PlayerList({
                   colSpan={isDeleteMode ? 4 : 3}
                   className="text-center py-8 text-muted-foreground"
                 >
-                  No players found.
+                  No se encontraron jugadores.
                 </TableCell>
               </TableRow>
             )}
@@ -193,14 +193,16 @@ export function PlayerList({
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete{' '}
-              {selectedIds.length} selected player(s).
+              Esta acción no se puede deshacer. Esto eliminará permanentemente{' '}
+              {selectedIds.length} jugador(es) seleccionado(s).
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={(e) => {
                 e.preventDefault()
@@ -209,7 +211,7 @@ export function PlayerList({
               disabled={isDeleting}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {isDeleting ? 'Deleting...' : 'Confirm Deletion'}
+              {isDeleting ? 'Eliminando...' : 'Confirmar Eliminación'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

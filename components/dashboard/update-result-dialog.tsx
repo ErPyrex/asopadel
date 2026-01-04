@@ -65,12 +65,12 @@ export function UpdateResultDialog({ match }: UpdateResultDialogProps) {
         size="sm"
         title={
           match.status === 'cancelled'
-            ? 'Cannot update cancelled match'
-            : 'Cannot update future match'
+            ? 'No se puede actualizar un partido cancelado'
+            : 'No se puede actualizar un partido futuro'
         }
       >
         <Trophy className="mr-2 h-4 w-4 opacity-50" />
-        Result
+        Resultado
       </Button>
     )
   }
@@ -83,9 +83,9 @@ export function UpdateResultDialog({ match }: UpdateResultDialogProps) {
         awayScore: values.awayScore,
       })
       setOpen(false)
-      toast.success('Result updated successfully')
+      toast.success('Resultado actualizado con éxito')
     } catch {
-      toast.error('Failed to update result')
+      toast.error('Error al actualizar el resultado')
     }
   }
 
@@ -94,12 +94,12 @@ export function UpdateResultDialog({ match }: UpdateResultDialogProps) {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Trophy className="mr-2 h-4 w-4" />
-          Result
+          Resultado
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Update Match Result</DialogTitle>
+          <DialogTitle>Actualizar Resultado del Partido</DialogTitle>
         </DialogHeader>
         <div className="flex justify-between items-center px-4 py-2 bg-muted rounded-md mb-4">
           <span className="font-bold">{match.homeTeam.name}</span>
@@ -114,7 +114,7 @@ export function UpdateResultDialog({ match }: UpdateResultDialogProps) {
                 name="homeScore"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{match.homeTeam.name} Score</FormLabel>
+                    <FormLabel>Marcador {match.homeTeam.name}</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
@@ -127,7 +127,7 @@ export function UpdateResultDialog({ match }: UpdateResultDialogProps) {
                 name="awayScore"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{match.awayTeam.name} Score</FormLabel>
+                    <FormLabel>Marcador {match.awayTeam.name}</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
@@ -137,7 +137,7 @@ export function UpdateResultDialog({ match }: UpdateResultDialogProps) {
               />
             </div>
             <Button type="submit" className="w-full">
-              Save Result
+              Guardar Resultado
             </Button>
           </form>
         </Form>

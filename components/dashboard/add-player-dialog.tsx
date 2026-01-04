@@ -32,7 +32,7 @@ import {
 import { assignPlayerToTeam, getUnassignedPlayers } from '@/lib/actions/players'
 
 const formSchema = z.object({
-  playerId: z.string().min(1, 'Please select a player'),
+  playerId: z.string().min(1, 'Por favor, selecciona un jugador'),
 })
 
 export function AddPlayerDialog({
@@ -67,9 +67,9 @@ export function AddPlayerDialog({
       await assignPlayerToTeam({ ...values, teamId })
       setOpen(false)
       form.reset()
-      toast.success('Player added successfully')
+      toast.success('Jugador añadido con éxito')
     } catch {
-      toast.error('Failed to add player')
+      toast.error('Error al añadir el jugador')
     }
   }
 
@@ -78,12 +78,12 @@ export function AddPlayerDialog({
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="w-full">
           <Plus className="mr-2 h-3 w-3" />
-          Add Member
+          Añadir Miembro
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Member to {teamName}</DialogTitle>
+          <DialogTitle>Añadir Miembro a {teamName}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -92,7 +92,7 @@ export function AddPlayerDialog({
               name="playerId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Select Player</FormLabel>
+                  <FormLabel>Seleccionar Jugador</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -102,7 +102,7 @@ export function AddPlayerDialog({
                       <SelectTrigger className="w-full">
                         <SelectValue
                           placeholder={
-                            loading ? 'Loading...' : 'Select a player'
+                            loading ? 'Cargando...' : 'Seleccionar jugador'
                           }
                         />
                       </SelectTrigger>
@@ -110,7 +110,7 @@ export function AddPlayerDialog({
                     <SelectContent>
                       {players.length === 0 ? (
                         <SelectItem value="none" disabled>
-                          No players available
+                          No hay jugadores disponibles
                         </SelectItem>
                       ) : (
                         players.map((player) => (
@@ -126,7 +126,7 @@ export function AddPlayerDialog({
               )}
             />
             <Button type="submit" className="w-full">
-              Add Player
+              Añadir Jugador
             </Button>
           </form>
         </Form>

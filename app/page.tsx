@@ -22,11 +22,11 @@ export default async function LandingPage(props: {
           <HomeAuthButton />
         </div>
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
-          Padel League 2024
+          Liga de Pádel 2024
         </h1>
         <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
-          Follow the latest matches, check results, and track your favorite
-          teams.
+          Sigue los últimos partidos, consulta resultados y mantente al tanto de
+          tus equipos favoritos.
         </p>
       </section>
 
@@ -36,7 +36,7 @@ export default async function LandingPage(props: {
           {/* Tournaments Column (Left) - 4/12 width */}
           <div className="lg:col-span-4 space-y-8">
             <div className="flex items-center justify-between">
-              <h2 className="text-3xl font-bold">Tournaments</h2>
+              <h2 className="text-3xl font-bold">Torneos</h2>
             </div>
             <div className="grid gap-4">
               {tournaments.length > 0 ? (
@@ -45,7 +45,7 @@ export default async function LandingPage(props: {
                 ))
               ) : (
                 <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
-                  No tournaments found.
+                  No se encontraron torneos.
                 </div>
               )}
             </div>
@@ -54,29 +54,31 @@ export default async function LandingPage(props: {
           {/* Matches Column (Right) - 8/12 width */}
           <div className="lg:col-span-8 space-y-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <h2 className="text-3xl font-bold">Latest Matches</h2>
+              <h2 className="text-3xl font-bold">Últimos Partidos</h2>
 
               <div className="flex gap-2">
                 <Link href="/">
-                  <Button variant={!filter ? 'default' : 'outline'}>All</Button>
+                  <Button variant={!filter ? 'default' : 'outline'}>
+                    Todos
+                  </Button>
                 </Link>
                 <Link href="/?filter=played">
                   <Button variant={filter === 'played' ? 'default' : 'outline'}>
-                    Results
+                    Resultados
                   </Button>
                 </Link>
                 <Link href="/?filter=upcoming">
                   <Button
                     variant={filter === 'upcoming' ? 'default' : 'outline'}
                   >
-                    Upcoming
+                    Próximos
                   </Button>
                 </Link>
                 <Link href="/?filter=cancelled">
                   <Button
                     variant={filter === 'cancelled' ? 'default' : 'outline'}
                   >
-                    Cancelled
+                    Cancelados
                   </Button>
                 </Link>
               </div>
@@ -89,7 +91,7 @@ export default async function LandingPage(props: {
                 ))
               ) : (
                 <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
-                  No matches found.
+                  No se encontraron partidos.
                 </div>
               )}
             </div>

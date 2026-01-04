@@ -40,7 +40,7 @@ import { createTeam } from '@/lib/actions/teams'
 import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
   logo: z.string().optional(),
   playerIds: z.array(z.string()).optional(),
 })
@@ -66,9 +66,9 @@ export function CreateTeamDialog({
       await createTeam(values)
       setOpen(false)
       form.reset()
-      toast.success('Team created successfully')
+      toast.success('Equipo creado con éxito')
     } catch {
-      toast.error('Failed to create team')
+      toast.error('Error al crear el equipo')
     }
   }
 
@@ -77,12 +77,12 @@ export function CreateTeamDialog({
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
-          Create Team
+          Crear Equipo
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create New Team</DialogTitle>
+          <DialogTitle>Crear Nuevo Equipo</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -91,9 +91,9 @@ export function CreateTeamDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Team Name</FormLabel>
+                  <FormLabel>Nombre del Equipo</FormLabel>
                   <FormControl>
-                    <Input placeholder="Team Name" {...field} />
+                    <Input placeholder="Nombre del Equipo" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -104,7 +104,7 @@ export function CreateTeamDialog({
               name="logo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Logo URL (Optional)</FormLabel>
+                  <FormLabel>URL del Logo (Opcional)</FormLabel>
                   <FormControl>
                     <Input placeholder="https://..." {...field} />
                   </FormControl>
@@ -119,7 +119,7 @@ export function CreateTeamDialog({
                 name="playerIds"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Select Players</FormLabel>
+                    <FormLabel>Seleccionar Jugadores</FormLabel>
                     <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -132,17 +132,19 @@ export function CreateTeamDialog({
                             )}
                           >
                             {field.value?.length
-                              ? `${field.value.length} players selected`
-                              : 'Select players'}
+                              ? `${field.value.length} jugadores seleccionados`
+                              : 'Seleccionar jugadores'}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent className="w-[400px] p-0">
                         <Command>
-                          <CommandInput placeholder="Search player..." />
+                          <CommandInput placeholder="Buscar jugador..." />
                           <CommandList>
-                            <CommandEmpty>No player found.</CommandEmpty>
+                            <CommandEmpty>
+                              No se encontró al jugador.
+                            </CommandEmpty>
                             <CommandGroup>
                               {players.map((player) => (
                                 <CommandItem
@@ -186,7 +188,7 @@ export function CreateTeamDialog({
               />
             )}
             <Button type="submit" className="w-full">
-              Create Team
+              Crear Equipo
             </Button>
           </form>
         </Form>
