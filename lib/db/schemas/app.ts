@@ -36,6 +36,25 @@ export const matches = sqliteTable('matches', {
     .default('upcoming')
     .notNull(),
   cancellationReason: text('cancellation_reason'),
+  tournamentId: text('tournament_id').references(() => tournaments.id, {
+    onDelete: 'set null',
+  }),
+})
+
+export const tournaments = sqliteTable('tournaments', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  description: text('description'),
+  startDate: integer('start_date', { mode: 'timestamp' }).notNull(),
+  endDate: integer('end_date', { mode: 'timestamp' }),
+  status: text('status', {
+    enum: ['upcoming', 'ongoing', 'completed', 'cancelled'],
+  })
+    .default('upcoming')
+    .notNull(),
+  cancellationReason: text('cancellation_reason'),
 })
 
 export const teamsRelations = relations(teams, ({ many }) => ({
@@ -62,4 +81,12 @@ export const matchesRelations = relations(matches, ({ one }) => ({
     references: [teams.id],
     relationName: 'awayMatches',
   }),
+  tournament: one(tournaments, {
+    fields: [matches.tournamentId],
+    references: [tournaments.id],
+  }),
+}))
+
+export const tournamentsRelations = relations(tournaments, ({ many }) => ({
+  matches: many(matches),
 }))
