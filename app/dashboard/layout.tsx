@@ -49,6 +49,12 @@ export default async function DashboardLayout({
               >
                 Matches
               </Link>
+              <Link
+                href="/dashboard/tournaments"
+                className="transition-colors hover:text-foreground/80"
+              >
+                Tournaments
+              </Link>
             </nav>
           </div>
           <LogoutButton />
