@@ -28,7 +28,7 @@ import { Input } from '@/components/ui/input'
 import { cancelTournament } from '@/lib/actions/tournaments'
 
 const formSchema = z.object({
-  reason: z.string().min(1, 'Reason is required'),
+  reason: z.string().min(1, 'El motivo es obligatorio'),
 })
 
 export function CancelTournamentDialog({
@@ -52,9 +52,9 @@ export function CancelTournamentDialog({
       })
       setOpen(false)
       form.reset()
-      toast.success('Tournament cancelled successfully')
+      toast.success('Torneo cancelado con éxito')
     } catch (error) {
-      toast.error('Failed to cancel tournament')
+      toast.error('Error al cancelar el torneo')
       console.error(error)
     }
   }
@@ -64,15 +64,15 @@ export function CancelTournamentDialog({
       <DialogTrigger asChild>
         <Button variant="destructive" size="sm">
           <Ban className="mr-2 h-4 w-4" />
-          Cancel Tournament
+          Cancelar Torneo
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Cancel Tournament</DialogTitle>
+          <DialogTitle>Cancelar Torneo</DialogTitle>
           <DialogDescription>
-            Are you sure you want to cancel this tournament? This action cannot
-            be undone and will be visible to all users.
+            ¿Estás seguro de que quieres cancelar este torneo? Esta acción no se
+            puede deshacer y será visible para todos los usuarios.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -82,10 +82,10 @@ export function CancelTournamentDialog({
               name="reason"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cancellation Reason</FormLabel>
+                  <FormLabel>Motivo de Cancelación</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g. Budget issues, Lack of players"
+                      placeholder="Ej: Problemas de presupuesto, falta de jugadores"
                       {...field}
                     />
                   </FormControl>
@@ -95,7 +95,7 @@ export function CancelTournamentDialog({
             />
             <DialogFooter>
               <Button type="submit" variant="destructive">
-                Confirm Cancellation
+                Confirmar Cancelación
               </Button>
             </DialogFooter>
           </form>

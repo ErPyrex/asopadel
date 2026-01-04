@@ -26,7 +26,7 @@ export function LogoutButton() {
       className="text-muted-foreground hover:text-foreground"
     >
       <LogOut className="mr-2 h-4 w-4" />
-      Sign Out
+      Cerrar Sesión
     </Button>
   )
 }

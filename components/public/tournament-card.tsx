@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { Calendar, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
@@ -52,12 +53,12 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
                 </h3>
                 <p className="text-xs text-muted-foreground mt-1">
                   {tournament.status === 'upcoming'
-                    ? 'Upcoming Tournament'
+                    ? 'Próximo Torneo'
                     : tournament.status === 'ongoing'
-                      ? 'Tournament in Progress'
+                      ? 'Torneo en Progreso'
                       : tournament.status === 'cancelled'
-                        ? 'Tournament Cancelled'
-                        : 'Completed Tournament'}
+                        ? 'Torneo Cancelado'
+                        : 'Torneo Completado'}
                 </p>
               </div>
             </div>
@@ -72,7 +73,13 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
                       : 'outline'
               }
             >
-              {tournament.status.toUpperCase()}
+              {tournament.status === 'completed'
+                ? 'COMPLETADO'
+                : tournament.status === 'ongoing'
+                  ? 'EN CURSO'
+                  : tournament.status === 'cancelled'
+                    ? 'CANCELADO'
+                    : 'PRÓXIMO'}
             </Badge>
           </div>
 
@@ -81,7 +88,7 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
             tournament.cancellationReason ? (
               <div className="bg-destructive/10 p-3 rounded-lg border border-destructive/20">
                 <p className="text-xs font-bold text-destructive uppercase tracking-widest mb-1">
-                  Reason for Cancellation
+                  Motivo de la Cancelación
                 </p>
                 <p className="text-sm text-destructive/90 font-medium italic">
                   {tournament.cancellationReason}
@@ -98,9 +105,9 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="h-4 w-4" />
               <span>
-                {format(tournament.startDate, 'MMM d, yyyy')}
+                {format(tournament.startDate, 'MMM d, yyyy', { locale: es })}
                 {tournament.endDate &&
-                  ` - ${format(tournament.endDate, 'MMM d, yyyy')}`}
+                  ` - ${format(tournament.endDate, 'MMM d, yyyy', { locale: es })}`}
               </span>
             </div>
           </div>

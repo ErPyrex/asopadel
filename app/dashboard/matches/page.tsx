@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { CancelMatchDialog } from '@/components/dashboard/cancel-match-dialog'
 import { CreateMatchDialog } from '@/components/dashboard/create-match-dialog'
 import { UpdateResultDialog } from '@/components/dashboard/update-result-dialog'
@@ -13,7 +14,7 @@ export default async function DashboardMatchesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Matches</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Partidos</h1>
         <CreateMatchDialog teams={teams} />
       </div>
 
@@ -27,7 +28,7 @@ export default async function DashboardMatchesPage() {
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">
-                    {format(match.date, 'PPP')}
+                    {format(match.date, 'PPP', { locale: es })}
                   </span>
                   {match.tournament && (
                     <>
@@ -40,17 +41,17 @@ export default async function DashboardMatchesPage() {
                 </div>
                 {match.status === 'played' && (
                   <span className="text-sm font-medium mt-1">
-                    Result: {match.homeScore} - {match.awayScore}
+                    Resultado: {match.homeScore} - {match.awayScore}
                   </span>
                 )}
                 {match.status === 'cancelled' && (
                   <div className="mt-2 p-2 bg-destructive/10 rounded-md">
                     <span className="text-xs font-bold text-destructive uppercase">
-                      Cancelled
+                      Cancelado
                     </span>
                     {match.cancellationReason && (
                       <p className="text-sm text-destructive mt-1">
-                        Reason: {match.cancellationReason}
+                        Motivo: {match.cancellationReason}
                       </p>
                     )}
                   </div>

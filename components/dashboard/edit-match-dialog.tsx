@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { CalendarIcon, Edit2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -42,11 +43,11 @@ import { cn } from '@/lib/utils'
 const formSchema = z
   .object({
     date: z.date(),
-    homeTeamId: z.string().min(1, 'Home team is required.'),
-    awayTeamId: z.string().min(1, 'Away team is required.'),
+    homeTeamId: z.string().min(1, 'El equipo local es obligatorio.'),
+    awayTeamId: z.string().min(1, 'El equipo visitante es obligatorio.'),
   })
   .refine((data) => data.homeTeamId !== data.awayTeamId, {
-    message: 'Home and Away teams must be different',
+    message: 'Los equipos local y visitante deben ser diferentes',
     path: ['awayTeamId'],
   })
 
@@ -86,9 +87,9 @@ export function EditMatchDialog({
         ...values,
       })
       setOpen(false)
-      toast.success('Match updated successfully')
+      toast.success('Partido actualizado con éxito')
     } catch {
-      toast.error('Failed to update match')
+      toast.error('Error al actualizar el partido')
     }
   }
 
@@ -101,7 +102,7 @@ export function EditMatchDialog({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Match</DialogTitle>
+          <DialogTitle>Editar Partido</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -110,7 +111,7 @@ export function EditMatchDialog({
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Fecha</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -122,9 +123,9 @@ export function EditMatchDialog({
                           )}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(field.value, 'PPP', { locale: es })
                           ) : (
-                            <span>Pick a date</span>
+                            <span>Seleccionar fecha</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -166,14 +167,14 @@ export function EditMatchDialog({
               name="homeTeamId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Home Team</FormLabel>
+                  <FormLabel>Equipo Local</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select home team" />
+                        <SelectValue placeholder="Seleccionar equipo local" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -195,14 +196,14 @@ export function EditMatchDialog({
               name="awayTeamId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Away Team</FormLabel>
+                  <FormLabel>Equipo Visitante</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select away team" />
+                        <SelectValue placeholder="Seleccionar equipo visitante" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -220,7 +221,7 @@ export function EditMatchDialog({
               )}
             />
             <Button type="submit" className="w-full">
-              Update Match
+              Actualizar Partido
             </Button>
           </form>
         </Form>

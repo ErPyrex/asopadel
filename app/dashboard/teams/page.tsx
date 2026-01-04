@@ -12,7 +12,7 @@ export default async function AdminTeamsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Teams</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Equipos</h1>
         <div className="flex gap-2">
           <CreateTeamDialog players={players} />
         </div>
@@ -27,10 +27,10 @@ export default async function AdminTeamsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-sm text-muted-foreground mb-4">
-                {team.players.length} Players
+                {team.players.length} Jugadores
               </div>
               <div className="space-y-2">
-                <h4 className="text-sm font-semibold">Members:</h4>
+                <h4 className="text-sm font-semibold">Miembros:</h4>
                 <ul className="list-disc list-inside text-sm">
                   {team.players.map((p) => (
                     <li key={p.id}>{p.name}</li>

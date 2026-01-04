@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { BarChart3, ChevronLeft, History, Trophy, User } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -79,13 +80,13 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5 text-primary" />
-              Information
+              Información
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
               <span className="text-sm font-medium text-muted-foreground block mb-1">
-                Current Team
+                Equipo Actual
               </span>
               <div className="flex items-center gap-2">
                 {player.team ? (
@@ -97,12 +98,12 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
                       href={`/dashboard/teams`}
                       className="text-xs text-primary hover:underline"
                     >
-                      View Team
+                      Ver Equipo
                     </Link>
                   </>
                 ) : (
                   <span className="text-muted-foreground italic">
-                    Free Agent (No Team)
+                    Agente Libre (Sin Equipo)
                   </span>
                 )}
               </div>
@@ -110,7 +111,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
 
             <div>
               <span className="text-sm font-medium text-muted-foreground block mb-3">
-                Tournament Activity
+                Actividad en Torneos
               </span>
               <div className="flex flex-wrap gap-2">
                 {tournamentDetails.size > 0 ? (
@@ -126,7 +127,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
                   ))
                 ) : (
                   <span className="text-xs text-muted-foreground italic">
-                    No tournaments participated yet.
+                    Aún no ha participado en torneos.
                   </span>
                 )}
               </div>
@@ -138,14 +139,14 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" />
-              Statistics (All Matches)
+              Estadísticas (Todos los Partidos)
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-4 gap-4 text-center">
               <div className="space-y-1">
                 <span className="text-sm font-medium text-muted-foreground">
-                  Won
+                  Ganados
                 </span>
                 <div className="text-2xl font-bold text-green-600 font-mono">
                   {wins}
@@ -153,7 +154,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
               </div>
               <div className="space-y-1">
                 <span className="text-sm font-medium text-muted-foreground">
-                  Lost
+                  Perdidos
                 </span>
                 <div className="text-2xl font-bold text-red-600 font-mono">
                   {losses}
@@ -161,7 +162,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
               </div>
               <div className="space-y-1">
                 <span className="text-sm font-medium text-muted-foreground">
-                  Drawn
+                  Empatados
                 </span>
                 <div className="text-2xl font-bold text-yellow-600 font-mono">
                   {draws}
@@ -169,7 +170,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
               </div>
               <div className="space-y-1">
                 <span className="text-sm font-medium text-muted-foreground">
-                  Played
+                  Jugados
                 </span>
                 <div className="text-2xl font-bold font-mono text-slate-900">
                   {totalPlayed}
@@ -179,7 +180,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
             {player.team && totalPlayed > 0 && (
               <div className="mt-6 pt-6 border-t">
                 <div className="flex justify-between items-center text-sm mb-2">
-                  <span className="text-muted-foreground">Success Rate</span>
+                  <span className="text-muted-foreground">Tasa de Éxito</span>
                   <span className="font-bold">
                     {((wins / totalPlayed) * 100).toFixed(1)}%
                   </span>
@@ -194,12 +195,12 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
             )}
             {!player.team && (
               <p className="text-sm text-muted-foreground italic text-center py-4">
-                Assign a team to track statistics.
+                Asigna un equipo para rastrear las estadísticas.
               </p>
             )}
             {player.team && totalPlayed === 0 && (
               <p className="text-sm text-muted-foreground italic text-center py-4">
-                No matches played yet.
+                Aún no ha jugado partidos.
               </p>
             )}
           </CardContent>
@@ -210,7 +211,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <History className="h-5 w-5 text-primary" />
-            Recent Match History
+            Historial Reciente de Partidos
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -244,7 +245,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
                         )}
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        {format(match.date, 'PPP')}
+                        {format(match.date, 'PPP', { locale: es })}
                       </span>
                     </div>
 
@@ -267,7 +268,11 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
                               isWinner && 'bg-green-600 hover:bg-green-700',
                             )}
                           >
-                            {isWinner ? 'Win' : isDraw ? 'Draw' : 'Loss'}
+                            {isWinner
+                              ? 'Victoria'
+                              : isDraw
+                                ? 'Empate'
+                                : 'Derrota'}
                           </Badge>
                         </div>
                       ) : (
@@ -275,7 +280,9 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
                           variant="outline"
                           className="uppercase text-[10px] font-bold"
                         >
-                          {match.status}
+                          {match.status === 'cancelled'
+                            ? 'Cancelado'
+                            : 'Próximo'}
                         </Badge>
                       )}
                     </div>
@@ -284,7 +291,7 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
               })
             ) : (
               <div className="text-center py-8 text-muted-foreground italic border-2 border-dashed rounded-xl">
-                No recent matches found.
+                No se encontraron partidos recientes.
               </div>
             )}
           </div>

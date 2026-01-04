@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { ArrowLeft, Calendar, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -76,7 +77,13 @@ export default async function TournamentDetailPage(props: {
                     }
                     className="capitalize text-lg py-1 px-4"
                   >
-                    {tournament.status}
+                    {tournament.status === 'completed'
+                      ? 'COMPLETADO'
+                      : tournament.status === 'ongoing'
+                        ? 'EN CURSO'
+                        : tournament.status === 'cancelled'
+                          ? 'CANCELADO'
+                          : 'PRÓXIMO'}
                   </Badge>
                 </div>
                 {tournament.status === 'cancelled' &&
@@ -97,9 +104,9 @@ export default async function TournamentDetailPage(props: {
                   <div className="flex items-center gap-2 text-white font-bold">
                     <Calendar className="h-4 w-4 text-primary" />
                     <span>
-                      {format(tournament.startDate, 'd MMM')}
+                      {format(tournament.startDate, 'd MMM', { locale: es })}
                       {tournament.endDate &&
-                        ` — ${format(tournament.endDate, 'd MMM, yyyy')}`}
+                        ` — ${format(tournament.endDate, 'd MMM, yyyy', { locale: es })}`}
                     </span>
                   </div>
                 </div>
@@ -224,13 +231,13 @@ export default async function TournamentDetailPage(props: {
                       Periodo
                     </div>
                     <div className="text-sm font-bold">
-                      {format(tournament.startDate, 'PPP')}
+                      {format(tournament.startDate, 'PPP', { locale: es })}
                       {tournament.endDate && (
                         <>
                           <span className="block text-slate-400 font-normal my-1">
                             hasta
                           </span>
-                          {format(tournament.endDate, 'PPP')}
+                          {format(tournament.endDate, 'PPP', { locale: es })}
                         </>
                       )}
                     </div>

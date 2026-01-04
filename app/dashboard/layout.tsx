@@ -28,32 +28,32 @@ export default async function DashboardLayout({
               href="/dashboard"
               className="mr-8 font-bold hover:text-foreground/80 transition-colors"
             >
-              Dashboard
+              Panel
             </Link>
             <nav className="flex items-center space-x-6 text-sm font-medium">
               <Link
                 href="/dashboard/teams"
                 className="transition-colors hover:text-foreground/80"
               >
-                Teams
+                Equipos
               </Link>
               <Link
                 href="/dashboard/players"
                 className="transition-colors hover:text-foreground/80"
               >
-                Players
+                Jugadores
               </Link>
               <Link
                 href="/dashboard/matches"
                 className="transition-colors hover:text-foreground/80"
               >
-                Matches
+                Partidos
               </Link>
               <Link
                 href="/dashboard/tournaments"
                 className="transition-colors hover:text-foreground/80"
               >
-                Tournaments
+                Torneos
               </Link>
             </nav>
           </div>

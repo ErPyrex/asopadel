@@ -10,14 +10,14 @@ export default async function DashboardTournamentsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Tournaments</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Torneos</h1>
         <CreateTournamentDialog />
       </div>
 
       <div className="grid gap-4">
         {tournaments.length === 0 ? (
           <p className="text-muted-foreground">
-            No tournaments found. Create one to get started.
+            No se encontraron torneos. Crea uno para comenzar.
           </p>
         ) : (
           tournaments.map((tournament) => (

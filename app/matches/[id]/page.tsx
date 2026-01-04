@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { AlertCircle, ArrowLeft, Calendar, Trophy, Users } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -50,7 +51,7 @@ export default async function MatchDetailPage(props: {
               <div className="flex items-center justify-center gap-3 text-slate-400">
                 <Calendar className="h-4 w-4" />
                 <span className="font-medium">
-                  {format(match.date, 'PPPP')}
+                  {format(match.date, 'PPPP', { locale: es })}
                 </span>
               </div>
             </div>
@@ -110,7 +111,11 @@ export default async function MatchDetailPage(props: {
                   }
                   className="px-6 py-1 text-sm font-bold uppercase tracking-widest"
                 >
-                  {match.status}
+                  {match.status === 'played'
+                    ? 'JUGADO'
+                    : match.status === 'cancelled'
+                      ? 'CANCELADO'
+                      : 'PRÓXIMO'}
                 </Badge>
               </div>
 
@@ -233,10 +238,10 @@ export default async function MatchDetailPage(props: {
                       Fecha y Hora
                     </div>
                     <div className="text-sm font-bold text-slate-900">
-                      {format(match.date, 'PPP')}
+                      {format(match.date, 'PPP', { locale: es })}
                     </div>
                     <div className="text-xs text-slate-500">
-                      {format(match.date, 'p')}
+                      {format(match.date, 'p', { locale: es })}
                     </div>
                   </div>
                 </div>

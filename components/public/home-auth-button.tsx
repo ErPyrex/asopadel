@@ -19,7 +19,7 @@ export function HomeAuthButton() {
     return (
       <Link href="/dashboard">
         <Button variant="ghost" className="text-white hover:bg-white/20">
-          Ir Dashboard
+          Ir al Panel
         </Button>
       </Link>
     )

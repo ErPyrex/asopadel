@@ -62,9 +62,9 @@ export default async function TeamPage({
   }
 
   const stats = [
-    { name: 'Played', value: playedMatches.length },
-    { name: 'Won', value: wins },
-    { name: 'Lost', value: losses },
+    { name: 'Jugados', value: playedMatches.length },
+    { name: 'Ganados', value: wins },
+    { name: 'Perdidos', value: losses },
   ]
 
   return (
@@ -95,7 +95,7 @@ export default async function TeamPage({
         {/* Members */}
         <Card>
           <CardHeader>
-            <CardTitle>Members</CardTitle>
+            <CardTitle>Miembros</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-4">
@@ -118,7 +118,7 @@ export default async function TeamPage({
                 </Link>
               ))}
               {team.players.length === 0 && (
-                <li className="text-muted-foreground">No members yet.</li>
+                <li className="text-muted-foreground">Aún no hay miembros.</li>
               )}
             </ul>
           </CardContent>
@@ -127,7 +127,7 @@ export default async function TeamPage({
         {/* Stats */}
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Performance</CardTitle>
+            <CardTitle>Rendimiento</CardTitle>
           </CardHeader>
           <CardContent>
             <TeamStatsChart stats={stats} />
@@ -139,14 +139,16 @@ export default async function TeamPage({
 
       {/* Matches History */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">Match History</h2>
+        <h2 className="text-2xl font-bold">Historial de Partidos</h2>
         <div className="grid gap-4">
           {normalizedMatches.length > 0 ? (
             normalizedMatches.map((match) => (
               <MatchCard key={match.id} match={match} />
             ))
           ) : (
-            <div className="text-muted-foreground">No matches found.</div>
+            <div className="text-muted-foreground">
+              No se encontraron partidos.
+            </div>
           )}
         </div>
       </div>

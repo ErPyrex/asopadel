@@ -1,6 +1,6 @@
 'use server'
 
-import { desc, eq } from 'drizzle-orm'
+import { desc, eq, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db/client'
 import { matches, tournaments } from '@/lib/db/schemas/app'
@@ -27,7 +27,7 @@ export async function createTournament({
 }
 
 export async function getTournaments() {
-  return await db.query.tournaments.findMany({
+  const results = await db.query.tournaments.findMany({
     with: {
       matches: {
         with: {
@@ -36,12 +36,29 @@ export async function getTournaments() {
         },
       },
     },
-    orderBy: [desc(tournaments.startDate)],
+    orderBy: [
+      sql`CASE 
+        WHEN status = 'upcoming' THEN 1
+        WHEN status = 'ongoing' THEN 2
+        WHEN status = 'cancelled' THEN 3
+        WHEN status = 'completed' THEN 4
+        ELSE 5
+      END`,
+      desc(tournaments.startDate),
+    ],
+  })
+
+  const now = new Date()
+  return results.map((t) => {
+    if (t.status === 'upcoming' && t.startDate <= now) {
+      return { ...t, status: 'ongoing' }
+    }
+    return t
   })
 }
 
 export async function getTournament(id: string) {
-  return await db.query.tournaments.findFirst({
+  const tournament = await db.query.tournaments.findFirst({
     where: eq(tournaments.id, id),
     with: {
       matches: {
@@ -52,6 +69,15 @@ export async function getTournament(id: string) {
       },
     },
   })
+
+  if (!tournament) return null
+
+  const now = new Date()
+  if (tournament.status === 'upcoming' && tournament.startDate <= now) {
+    return { ...tournament, status: 'ongoing' }
+  }
+
+  return tournament
 }
 
 export async function updateTournamentStatus({
@@ -101,4 +127,32 @@ export async function cancelTournament({
   revalidatePath('/dashboard/tournaments')
   revalidatePath('/')
   revalidatePath(`/tournaments/${tournamentId}`)
+}
+
+export async function editTournament({
+  id,
+  name,
+  description,
+  startDate,
+  endDate,
+}: {
+  id: string
+  name: string
+  description?: string
+  startDate: Date
+  endDate?: Date | null
+}) {
+  await db
+    .update(tournaments)
+    .set({
+      name,
+      description,
+      startDate,
+      endDate,
+    })
+    .where(eq(tournaments.id, id))
+
+  revalidatePath('/dashboard/tournaments')
+  revalidatePath('/')
+  revalidatePath(`/tournaments/${id}`)
 }

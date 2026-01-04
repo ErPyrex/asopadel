@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { CalendarIcon, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -42,12 +43,12 @@ import { cn } from '@/lib/utils'
 const formSchema = z
   .object({
     date: z.date(),
-    homeTeamId: z.string().min(1, 'Home team is required.'),
-    awayTeamId: z.string().min(1, 'Away team is required.'),
+    homeTeamId: z.string().min(1, 'El equipo local es obligatorio.'),
+    awayTeamId: z.string().min(1, 'El equipo visitante es obligatorio.'),
     tournamentId: z.string().optional(),
   })
   .refine((data) => data.homeTeamId !== data.awayTeamId, {
-    message: 'Home and Away teams must be different',
+    message: 'Los equipos local y visitante deben ser diferentes',
     path: ['awayTeamId'],
   })
 
@@ -82,9 +83,9 @@ export function CreateMatchDialog({
       await createMatch(values)
       setOpen(false)
       form.reset()
-      toast.success('Match created successfully')
+      toast.success('Partido creado con éxito')
     } catch {
-      toast.error('Failed to create match')
+      toast.error('Error al crear el partido')
     }
   }
 
@@ -96,12 +97,12 @@ export function CreateMatchDialog({
           variant={iconOnly ? 'ghost' : 'default'}
         >
           <Plus className={cn('h-4 w-4', !iconOnly && 'mr-2')} />
-          {!iconOnly && 'Create Match'}
+          {!iconOnly && 'Crear Partido'}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Match</DialogTitle>
+          <DialogTitle>Crear Nuevo Partido</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -110,7 +111,7 @@ export function CreateMatchDialog({
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Fecha</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -122,9 +123,9 @@ export function CreateMatchDialog({
                           )}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(field.value, 'PPP', { locale: es })
                           ) : (
-                            <span>Pick a date</span>
+                            <span>Seleccionar fecha</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -166,14 +167,14 @@ export function CreateMatchDialog({
               name="homeTeamId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Home Team</FormLabel>
+                  <FormLabel>Equipo Local</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select home team" />
+                        <SelectValue placeholder="Seleccionar equipo local" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -195,14 +196,14 @@ export function CreateMatchDialog({
               name="awayTeamId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Away Team</FormLabel>
+                  <FormLabel>Equipo Visitante</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select away team" />
+                        <SelectValue placeholder="Seleccionar equipo visitante" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -225,14 +226,14 @@ export function CreateMatchDialog({
                 name="tournamentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tournament (Optional)</FormLabel>
+                    <FormLabel>Torneo (Opcional)</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select tournament" />
+                          <SelectValue placeholder="Seleccionar torneo" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -249,7 +250,7 @@ export function CreateMatchDialog({
               />
             )}
             <Button type="submit" className="w-full">
-              Create Match
+              Crear Partido
             </Button>
           </form>
         </Form>

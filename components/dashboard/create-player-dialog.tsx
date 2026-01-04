@@ -28,10 +28,10 @@ import { createPlayer } from '@/lib/actions/players'
 const formSchema = z.object({
   name: z
     .string()
-    .min(2, 'Name must be at least 2 characters')
+    .min(2, 'El nombre debe tener al menos 2 caracteres')
     .regex(
       /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$/,
-      'Name can only contain letters and spaces',
+      'El nombre solo puede contener letras y espacios',
     ),
 })
 
@@ -51,9 +51,9 @@ export function CreatePlayerDialog() {
       })
       setOpen(false)
       form.reset()
-      toast.success('Player created successfully')
+      toast.success('Jugador creado con éxito')
     } catch {
-      toast.error('Failed to create player')
+      toast.error('Error al crear el jugador')
     }
   }
 
@@ -62,12 +62,12 @@ export function CreatePlayerDialog() {
       <DialogTrigger asChild>
         <Button>
           <UserPlus className="mr-2 h-4 w-4" />
-          Create Player
+          Crear Jugador
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create New Player</DialogTitle>
+          <DialogTitle>Crear Nuevo Jugador</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -76,16 +76,16 @@ export function CreatePlayerDialog() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Player Name</FormLabel>
+                  <FormLabel>Nombre del Jugador</FormLabel>
                   <FormControl>
-                    <Input placeholder="Player Name" {...field} />
+                    <Input placeholder="Nombre del Jugador" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button type="submit" className="w-full">
-              Create Player
+              Crear Jugador
             </Button>
           </form>
         </Form>

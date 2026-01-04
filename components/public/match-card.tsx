@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
@@ -22,13 +23,13 @@ export function MatchCard({ match }: MatchCardProps) {
       <Card className="hover:shadow-lg transition-all hover:border-primary/50 relative overflow-hidden">
         {match.status === 'cancelled' && (
           <div className="absolute top-0 right-0 bg-destructive text-destructive-foreground px-3 py-1 text-xs font-bold uppercase z-10">
-            Cancelled
+            Cancelado
           </div>
         )}
         <CardContent className="p-6">
           <div className="flex flex-col items-center justify-center space-y-4">
             <div className="text-sm text-muted-foreground font-medium uppercase tracking-wider group-hover:text-primary transition-colors">
-              {format(match.date, 'PPP')}
+              {format(match.date, 'PPP', { locale: es })}
             </div>
 
             <div className="flex items-center justify-between w-full">
@@ -82,7 +83,7 @@ export function MatchCard({ match }: MatchCardProps) {
 
             {match.status === 'cancelled' && match.cancellationReason && (
               <div className="text-sm text-destructive font-medium mt-2 bg-destructive/10 px-4 py-2 rounded-md">
-                Reason: {match.cancellationReason}
+                Motivo: {match.cancellationReason}
               </div>
             )}
           </div>
