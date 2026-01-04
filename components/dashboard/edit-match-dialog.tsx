@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { CalendarIcon, Plus } from 'lucide-react'
+import { CalendarIcon, Edit2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -36,7 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { createMatch } from '@/lib/actions/matches'
+import { editMatch } from '@/lib/actions/matches'
 import { cn } from '@/lib/utils'
 
 const formSchema = z
@@ -44,25 +44,25 @@ const formSchema = z
     date: z.date(),
     homeTeamId: z.string().min(1, 'Home team is required.'),
     awayTeamId: z.string().min(1, 'Away team is required.'),
-    tournamentId: z.string().optional(),
   })
   .refine((data) => data.homeTeamId !== data.awayTeamId, {
     message: 'Home and Away teams must be different',
     path: ['awayTeamId'],
   })
 
-export function CreateMatchDialog({
+export function EditMatchDialog({
+  match,
   teams,
-  tournaments = [],
-  fixedTournamentId,
-  iconOnly = false,
   minDate,
   maxDate,
 }: {
+  match: {
+    id: string
+    date: Date
+    homeTeamId: string
+    awayTeamId: string
+  }
   teams: { id: string; name: string }[]
-  tournaments?: { id: string; name: string }[]
-  fixedTournamentId?: string
-  iconOnly?: boolean
   minDate?: Date
   maxDate?: Date | null
 }) {
@@ -70,7 +70,9 @@ export function CreateMatchDialog({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      tournamentId: fixedTournamentId,
+      date: new Date(match.date),
+      homeTeamId: match.homeTeamId,
+      awayTeamId: match.awayTeamId,
     },
   })
 
@@ -79,29 +81,27 @@ export function CreateMatchDialog({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await createMatch(values)
+      await editMatch({
+        matchId: match.id,
+        ...values,
+      })
       setOpen(false)
-      form.reset()
-      toast.success('Match created successfully')
+      toast.success('Match updated successfully')
     } catch {
-      toast.error('Failed to create match')
+      toast.error('Failed to update match')
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          size={iconOnly ? 'icon' : 'default'}
-          variant={iconOnly ? 'ghost' : 'default'}
-        >
-          <Plus className={cn('h-4 w-4', !iconOnly && 'mr-2')} />
-          {!iconOnly && 'Create Match'}
+        <Button size="icon" variant="ghost">
+          <Edit2 className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Match</DialogTitle>
+          <DialogTitle>Edit Match</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -152,7 +152,7 @@ export function CreateMatchDialog({
                             date < new Date(new Date().setHours(0, 0, 0, 0))
                           )
                         }}
-                        defaultMonth={minDate || undefined}
+                        defaultMonth={minDate || field.value || undefined}
                         initialFocus
                       />
                     </PopoverContent>
@@ -219,37 +219,8 @@ export function CreateMatchDialog({
                 </FormItem>
               )}
             />
-            {!fixedTournamentId && tournaments.length > 0 && (
-              <FormField
-                control={form.control}
-                name="tournamentId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tournament (Optional)</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select tournament" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {tournaments.map((tournament) => (
-                          <SelectItem key={tournament.id} value={tournament.id}>
-                            {tournament.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
             <Button type="submit" className="w-full">
-              Create Match
+              Update Match
             </Button>
           </form>
         </Form>

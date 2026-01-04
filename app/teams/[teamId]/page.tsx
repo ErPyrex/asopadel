@@ -1,8 +1,11 @@
+import { ArrowLeft } from 'lucide-react'
 import NextImage from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MatchCard } from '@/components/public/match-card'
 import { TeamStatsChart } from '@/components/public/team-stats-chart'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { getTeam } from '@/lib/actions/teams'
@@ -66,6 +69,13 @@ export default async function TeamPage({
 
   return (
     <div className="container mx-auto py-12 px-4">
+      <Link href="/">
+        <Button variant="ghost" className="mb-8 hover:bg-accent -ml-2">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Volver al inicio
+        </Button>
+      </Link>
+
       {/* Header */}
       <div className="flex flex-col items-center mb-12">
         <h1 className="text-4xl font-bold mb-4">{team.name}</h1>
@@ -90,14 +100,22 @@ export default async function TeamPage({
           <CardContent>
             <ul className="space-y-4">
               {team.players.map((player) => (
-                <li key={player.id} className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarFallback>
-                      {player.name.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="font-medium">{player.name}</span>
-                </li>
+                <Link
+                  key={player.id}
+                  href={`/players/${player.id}`}
+                  className="group"
+                >
+                  <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors">
+                    <Avatar className="group-hover:ring-2 group-hover:ring-primary transition-all">
+                      <AvatarFallback>
+                        {player.name.substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium group-hover:text-primary transition-colors">
+                      {player.name}
+                    </span>
+                  </li>
+                </Link>
               ))}
               {team.players.length === 0 && (
                 <li className="text-muted-foreground">No members yet.</li>

@@ -7,7 +7,7 @@ import { getMatches } from '@/lib/actions/matches'
 import { getTeams } from '@/lib/actions/teams'
 
 export default async function DashboardMatchesPage() {
-  const matches = await getMatches()
+  const matches = await getMatches(undefined, true)
   const teams = await getTeams()
 
   return (
@@ -25,9 +25,19 @@ export default async function DashboardMatchesPage() {
                 <span className="font-semibold text-lg">
                   {match.homeTeam?.name} vs {match.awayTeam?.name}
                 </span>
-                <span className="text-sm text-muted-foreground">
-                  {format(match.date, 'PPP')}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">
+                    {format(match.date, 'PPP')}
+                  </span>
+                  {match.tournament && (
+                    <>
+                      <span className="text-muted-foreground">•</span>
+                      <span className="text-sm font-medium text-primary">
+                        {match.tournament.name}
+                      </span>
+                    </>
+                  )}
+                </div>
                 {match.status === 'played' && (
                   <span className="text-sm font-medium mt-1">
                     Result: {match.homeScore} - {match.awayScore}

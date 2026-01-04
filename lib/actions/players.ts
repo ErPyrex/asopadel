@@ -37,8 +37,20 @@ export async function getPlayer(playerId: string) {
     with: {
       team: {
         with: {
-          homeMatches: true,
-          awayMatches: true,
+          homeMatches: {
+            with: {
+              tournament: true,
+              homeTeam: true,
+              awayTeam: true,
+            },
+          },
+          awayMatches: {
+            with: {
+              tournament: true,
+              homeTeam: true,
+              awayTeam: true,
+            },
+          },
         },
       },
     },

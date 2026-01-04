@@ -1,9 +1,12 @@
-import { BarChart3, ChevronLeft, User } from 'lucide-react'
+import { format } from 'date-fns'
+import { BarChart3, ChevronLeft, History, Trophy, User } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getPlayer } from '@/lib/actions/players'
+import { cn } from '@/lib/utils'
 
 // Correct type definition for Next.js page props
 type Props = {
@@ -24,29 +27,39 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
   let losses = 0
   let draws = 0
   let totalPlayed = 0
+  const participatedTournaments = new Set<string>()
+  const tournamentDetails = new Map<string, { name: string; id: string }>()
 
-  if (player.team) {
-    const homeMatches = player.team.homeMatches || []
-    const awayMatches = player.team.awayMatches || []
-    const allMatches = [...homeMatches, ...awayMatches]
+  const homeMatches = player.team?.homeMatches || []
+  const awayMatches = player.team?.awayMatches || []
+  const allMatches = [...homeMatches, ...awayMatches].sort(
+    (a, b) => b.date.getTime() - a.date.getTime(),
+  )
 
-    for (const match of allMatches) {
-      if (match.status !== 'played') continue
-      if (match.homeScore === null || match.awayScore === null) continue
+  for (const match of allMatches) {
+    if (match.tournamentId && match.tournament) {
+      participatedTournaments.add(match.tournamentId)
+      tournamentDetails.set(match.tournamentId, {
+        name: match.tournament.name,
+        id: match.tournament.id,
+      })
+    }
 
-      totalPlayed++
+    if (match.status !== 'played') continue
+    if (match.homeScore === null || match.awayScore === null) continue
 
-      const isHome = match.homeTeamId === player.team.id
-      const teamScore = isHome ? match.homeScore : match.awayScore
-      const opponentScore = isHome ? match.awayScore : match.homeScore
+    totalPlayed++
 
-      if (teamScore > opponentScore) {
-        wins++
-      } else if (teamScore < opponentScore) {
-        losses++
-      } else {
-        draws++
-      }
+    const isHome = match.homeTeamId === player.team?.id
+    const teamScore = isHome ? match.homeScore : match.awayScore
+    const opponentScore = isHome ? match.awayScore : match.homeScore
+
+    if (teamScore > opponentScore) {
+      wins++
+    } else if (teamScore < opponentScore) {
+      losses++
+    } else {
+      draws++
     }
   }
 
@@ -62,29 +75,58 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
+              <User className="h-5 w-5 text-primary" />
               Information
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div>
-              <span className="text-sm font-medium text-muted-foreground">
+              <span className="text-sm font-medium text-muted-foreground block mb-1">
                 Current Team
               </span>
-              <div className="text-lg font-semibold">
+              <div className="flex items-center gap-2">
                 {player.team ? (
-                  <Link
-                    href={`/dashboard/teams`}
-                    className="hover:underline text-primary"
-                  >
-                    {player.team.name}
-                  </Link>
+                  <>
+                    <Badge variant="secondary" className="px-3 py-1 text-sm">
+                      {player.team.name}
+                    </Badge>
+                    <Link
+                      href={`/dashboard/teams`}
+                      className="text-xs text-primary hover:underline"
+                    >
+                      View Team
+                    </Link>
+                  </>
                 ) : (
                   <span className="text-muted-foreground italic">
                     Free Agent (No Team)
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <span className="text-sm font-medium text-muted-foreground block mb-3">
+                Tournament Activity
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {tournamentDetails.size > 0 ? (
+                  Array.from(tournamentDetails.values()).map((t) => (
+                    <Badge
+                      key={t.id}
+                      variant="outline"
+                      className="bg-orange-50 text-orange-700 border-orange-200 flex items-center gap-1"
+                    >
+                      <Trophy className="h-3 w-3" />
+                      {t.name}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-xs text-muted-foreground italic">
+                    No tournaments participated yet.
                   </span>
                 )}
               </div>
@@ -95,8 +137,8 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
-              Statistics
+              <BarChart3 className="h-5 w-5 text-primary" />
+              Statistics (All Matches)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -129,22 +171,22 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
                 <span className="text-sm font-medium text-muted-foreground">
                   Played
                 </span>
-                <div className="text-2xl font-bold font-mono">
+                <div className="text-2xl font-bold font-mono text-slate-900">
                   {totalPlayed}
                 </div>
               </div>
             </div>
             {player.team && totalPlayed > 0 && (
               <div className="mt-6 pt-6 border-t">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Win Rate</span>
+                <div className="flex justify-between items-center text-sm mb-2">
+                  <span className="text-muted-foreground">Success Rate</span>
                   <span className="font-bold">
                     {((wins / totalPlayed) * 100).toFixed(1)}%
                   </span>
                 </div>
-                <div className="w-full bg-muted rounded-full h-2 mt-2 border overflow-hidden">
+                <div className="w-full bg-slate-100 rounded-full h-2.5 border overflow-hidden">
                   <div
-                    className="bg-green-500 h-full rounded-full transition-all duration-500"
+                    className="bg-green-500 h-full rounded-full transition-all duration-700 ease-in-out"
                     style={{ width: `${(wins / totalPlayed) * 100}%` }}
                   />
                 </div>
@@ -163,6 +205,91 @@ export default async function DashboardPlayerDetailsPage(props: Props) {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <History className="h-5 w-5 text-primary" />
+            Recent Match History
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {allMatches.length > 0 ? (
+              allMatches.slice(0, 5).map((match) => {
+                const isHome = match.homeTeamId === player.team?.id
+                const isWinner = isHome
+                  ? (match.homeScore ?? 0) > (match.awayScore ?? 0)
+                  : (match.awayScore ?? 0) > (match.homeScore ?? 0)
+                const isDraw = match.homeScore === match.awayScore
+
+                return (
+                  <div
+                    key={match.id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border bg-slate-50/50 hover:bg-slate-50 transition-colors gap-4"
+                  >
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-bold text-slate-900">
+                          {match.homeTeam?.name || 'Equipo Local'} vs{' '}
+                          {match.awayTeam?.name || 'Equipo Visitante'}
+                        </span>
+                        {match.tournament && (
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] uppercase font-black bg-white"
+                          >
+                            {match.tournament.name}
+                          </Badge>
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {format(match.date, 'PPP')}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      {match.status === 'played' ? (
+                        <div className="flex items-center gap-3">
+                          <div className="text-lg font-black font-mono">
+                            {match.homeScore} - {match.awayScore}
+                          </div>
+                          <Badge
+                            variant={
+                              isWinner
+                                ? 'default'
+                                : isDraw
+                                  ? 'secondary'
+                                  : 'outline'
+                            }
+                            className={cn(
+                              'text-[10px] uppercase font-bold px-2 py-0',
+                              isWinner && 'bg-green-600 hover:bg-green-700',
+                            )}
+                          >
+                            {isWinner ? 'Win' : isDraw ? 'Draw' : 'Loss'}
+                          </Badge>
+                        </div>
+                      ) : (
+                        <Badge
+                          variant="outline"
+                          className="uppercase text-[10px] font-bold"
+                        >
+                          {match.status}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                )
+              })
+            ) : (
+              <div className="text-center py-8 text-muted-foreground italic border-2 border-dashed rounded-xl">
+                No recent matches found.
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
