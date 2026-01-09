@@ -28,7 +28,7 @@ export default async function DashboardMatchesPage() {
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">
-                    {format(match.date, 'PPP', { locale: es })}
+                    {format(match.date, "PPP 'a las' h:mm a", { locale: es })}
                   </span>
                   {match.tournament && (
                     <>

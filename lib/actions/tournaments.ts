@@ -50,9 +50,19 @@ export async function getTournaments() {
 
   const now = new Date()
   return results.map((t) => {
-    if (t.status === 'upcoming' && t.startDate <= now) {
+    // Already cancelled or manually completed, don't change
+    if (t.status === 'cancelled' || t.status === 'completed') return t
+
+    // Check if it should be completed
+    if (t.endDate && t.endDate < now) {
+      return { ...t, status: 'completed' }
+    }
+
+    // Check if it should be ongoing (if no endDate, or endDate is future)
+    if (t.startDate <= now) {
       return { ...t, status: 'ongoing' }
     }
+
     return t
   })
 }
@@ -73,7 +83,18 @@ export async function getTournament(id: string) {
   if (!tournament) return null
 
   const now = new Date()
-  if (tournament.status === 'upcoming' && tournament.startDate <= now) {
+  // Already cancelled or manually completed, don't change
+  if (tournament.status === 'cancelled' || tournament.status === 'completed') {
+    return tournament
+  }
+
+  // Check if it should be completed
+  if (tournament.endDate && tournament.endDate < now) {
+    return { ...tournament, status: 'completed' }
+  }
+
+  // Check if it should be ongoing
+  if (tournament.startDate <= now) {
     return { ...tournament, status: 'ongoing' }
   }
 

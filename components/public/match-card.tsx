@@ -29,7 +29,7 @@ export function MatchCard({ match }: MatchCardProps) {
         <CardContent className="p-6">
           <div className="flex flex-col items-center justify-center space-y-4">
             <div className="text-sm text-muted-foreground font-medium uppercase tracking-wider group-hover:text-primary transition-colors">
-              {format(match.date, 'PPP', { locale: es })}
+              {format(match.date, 'PPP h:mm a', { locale: es })}
             </div>
 
             <div className="flex items-center justify-between w-full">

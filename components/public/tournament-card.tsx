@@ -58,7 +58,7 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
                       ? 'Torneo en Progreso'
                       : tournament.status === 'cancelled'
                         ? 'Torneo Cancelado'
-                        : 'Torneo Completado'}
+                        : 'Torneo Finalizado'}
                 </p>
               </div>
             </div>
@@ -74,7 +74,7 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
               }
             >
               {tournament.status === 'completed'
-                ? 'COMPLETADO'
+                ? 'FINALIZADO'
                 : tournament.status === 'ongoing'
                   ? 'EN CURSO'
                   : tournament.status === 'cancelled'

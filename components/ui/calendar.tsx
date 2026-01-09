@@ -1,12 +1,12 @@
 'use client'
 
+import { es } from 'date-fns/locale'
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from 'lucide-react'
 import * as React from 'react'
-import { es } from 'date-fns/locale'
 import {
   type DayButton,
   DayPicker,
