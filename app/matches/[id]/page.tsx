@@ -51,7 +51,7 @@ export default async function MatchDetailPage(props: {
               <div className="flex items-center justify-center gap-3 text-slate-400">
                 <Calendar className="h-4 w-4" />
                 <span className="font-medium">
-                  {format(match.date, 'PPPP', { locale: es })}
+                  {format(match.date, "PPPP 'a las' h:mm a", { locale: es })}
                 </span>
               </div>
             </div>
@@ -241,7 +241,7 @@ export default async function MatchDetailPage(props: {
                       {format(match.date, 'PPP', { locale: es })}
                     </div>
                     <div className="text-xs text-slate-500">
-                      {format(match.date, 'p', { locale: es })}
+                      {format(match.date, 'h:mm a', { locale: es })}
                     </div>
                   </div>
                 </div>

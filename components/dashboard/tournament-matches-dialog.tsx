@@ -72,7 +72,7 @@ export function TournamentMatchesDialog({
                   }
                 >
                   {tournament.status === 'completed'
-                    ? 'Completado'
+                    ? 'Finalizado'
                     : tournament.status === 'ongoing'
                       ? 'En Curso'
                       : tournament.status === 'cancelled'
@@ -165,7 +165,9 @@ export function TournamentMatchesDialog({
                     <div className="flex items-center gap-3 mt-2">
                       <span className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">
                         <CalendarIcon className="h-3.5 w-3.5" />
-                        {format(new Date(match.date), 'PPPP', { locale: es })}
+                        {format(new Date(match.date), "PPP 'a las' h:mm a", {
+                          locale: es,
+                        })}
                       </span>
                       {match.status === 'cancelled' &&
                         match.cancellationReason && (
