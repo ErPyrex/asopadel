@@ -54,8 +54,7 @@ export function UpdateResultDialog({ match }: UpdateResultDialogProps) {
   })
 
   // Disable if match is in the future (after today)
-  const isFuture =
-    new Date(match.date).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0)
+  const isFuture = new Date(match.date) > new Date()
 
   if (isFuture || match.status === 'cancelled') {
     return (

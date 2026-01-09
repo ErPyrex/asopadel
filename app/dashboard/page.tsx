@@ -7,14 +7,23 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getMatches } from '@/lib/actions/matches'
 import { getPlayers } from '@/lib/actions/players'
 import { getTeams } from '@/lib/actions/teams'
+import { getTournaments } from '@/lib/actions/tournaments'
 
 export default async function DashboardPage() {
   const teams = await getTeams()
   const matches = await getMatches()
   const players = await getPlayers()
+  const tournaments = await getTournaments()
 
   const upcomingMatches = matches.filter((m) => m.status === 'upcoming').length
+  const upcomingTournaments = tournaments.filter(
+    (t) => t.status === 'upcoming',
+  ).length
+  const totalUpcoming = upcomingMatches + upcomingTournaments
   const playedMatches = matches.filter((m) => m.status === 'played').length
+  const cancelledMatches = matches.filter(
+    (m) => m.status === 'cancelled',
+  ).length
 
   return (
     <div className="space-y-6">
@@ -36,7 +45,7 @@ export default async function DashboardPage() {
             <CardContent>
               <div className="text-2xl font-bold">{teams.length}</div>
               <p className="text-xs text-muted-foreground mr-1">
-                Equipos registrados en la liga
+                {teams.length} equipos y {players.length} jugadores registrados
               </p>
             </CardContent>
           </Card>
@@ -57,7 +66,7 @@ export default async function DashboardPage() {
             <CardContent>
               <div className="text-2xl font-bold">{matches.length}</div>
               <p className="text-xs text-muted-foreground">
-                {playedMatches} jugados, {upcomingMatches} próximos
+                {playedMatches} jugados, {cancelledMatches} cancelados
               </p>
             </CardContent>
           </Card>
@@ -75,10 +84,10 @@ export default async function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-primary">
-                {upcomingMatches}
+                {totalUpcoming}
               </div>
               <p className="text-xs text-muted-foreground">
-                Partidos por jugar
+                Partidos o torneos por jugar
               </p>
             </CardContent>
           </Card>

@@ -78,7 +78,7 @@ export default async function TournamentDetailPage(props: {
                     className="capitalize text-lg py-1 px-4"
                   >
                     {tournament.status === 'completed'
-                      ? 'COMPLETADO'
+                      ? 'FINALIZADO'
                       : tournament.status === 'ongoing'
                         ? 'EN CURSO'
                         : tournament.status === 'cancelled'
