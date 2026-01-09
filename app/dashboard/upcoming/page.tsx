@@ -2,12 +2,12 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { Calendar, ChevronLeft, Trophy } from 'lucide-react'
 import Link from 'next/link'
-import { getMatches } from '@/lib/actions/matches'
-import { getTournaments } from '@/lib/actions/tournaments'
 import { TournamentCard } from '@/components/public/tournament-card'
-import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { getMatches } from '@/lib/actions/matches'
+import { getTournaments } from '@/lib/actions/tournaments'
 
 export default async function UpcomingPage() {
   const matches = await getMatches('upcoming')

@@ -100,8 +100,8 @@ export function EditMatchDialog({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const h = parseInt(values.hour)
-      const m = parseInt(values.minute)
+      const h = parseInt(values.hour, 10)
+      const m = parseInt(values.minute, 10)
       let hour = h
       if (values.ampm === 'PM' && h < 12) hour += 12
       if (values.ampm === 'AM' && h === 12) hour = 0
